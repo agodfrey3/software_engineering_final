@@ -62,24 +62,35 @@ public class StockGUI extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		// Second-degree panel to contentPane
+		// Panel within contentPane
 		JPanel encompassing_panel = new JPanel();
+		// Organizes components from left to right, starting with the first added component
 		FlowLayout encompFlow = new FlowLayout(FlowLayout.LEFT, 0, 0);
 		encompassing_panel.setLayout(encompFlow);
 		
+		// Panel that houses users remaining balance label and amount
+		// as well as the leaderboard button
 		JPanel balanceleaderboard_panel = new JPanel();
+		// Organizes components from top to bottom, starting with the first added component
 		balanceleaderboard_panel.setLayout(new BoxLayout(balanceleaderboard_panel, BoxLayout.Y_AXIS));
 		balanceleaderboard_panel.setPreferredSize(new Dimension(325,800));
 		balanceleaderboard_panel.add(Box.createRigidArea(new Dimension(0,50)));
 		
+		// Panel that houses users the ticker label, price label, and the
+		// playbuttons_panel
 		JPanel tickerplaybuttons_panel = new JPanel();
 		tickerplaybuttons_panel.setLayout(new BoxLayout(tickerplaybuttons_panel, BoxLayout.Y_AXIS));
 		tickerplaybuttons_panel.setPreferredSize(new Dimension(550,800));
 		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,100)));
 		
+		// Panel that houses the long button and short buttons
 		JPanel playbuttons_panel = new JPanel();
 		playbuttons_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
 		playbuttons_panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
+		// Panel that houses the turn counter (title label and count label) and
+		// the transaction history button
 		JPanel turntranshistory_panel = new JPanel();
 		turntranshistory_panel.setLayout(new BoxLayout(turntranshistory_panel, BoxLayout.Y_AXIS));
 		turntranshistory_panel.setPreferredSize(new Dimension(325,800));
