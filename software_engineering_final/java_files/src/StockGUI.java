@@ -7,9 +7,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -51,65 +56,97 @@ public class StockGUI extends JFrame
 		
 		setTitle("The Stock Market Game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1400, 800);
+		setBounds(100, 100, 1200, 800);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		
+		JPanel encompassing_panel = new JPanel();
+		FlowLayout encompFlow = new FlowLayout(FlowLayout.LEFT, 0, 0);
+		encompassing_panel.setLayout(encompFlow);
+		
+		JPanel balanceleaderboard_panel = new JPanel();
+		balanceleaderboard_panel.setLayout(new BoxLayout(balanceleaderboard_panel, BoxLayout.Y_AXIS));
+		balanceleaderboard_panel.setPreferredSize(new Dimension(325,800));
+		balanceleaderboard_panel.add(Box.createRigidArea(new Dimension(0,50)));
+		
+		JPanel tickerplaybuttons_panel = new JPanel();
+		tickerplaybuttons_panel.setLayout(new BoxLayout(tickerplaybuttons_panel, BoxLayout.Y_AXIS));
+		tickerplaybuttons_panel.setPreferredSize(new Dimension(550,800));
+		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,100)));
+		
+		JPanel playbuttons_panel = new JPanel();
+		playbuttons_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
+		playbuttons_panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JPanel turntranshistory_panel = new JPanel();
+		turntranshistory_panel.setLayout(new BoxLayout(turntranshistory_panel, BoxLayout.Y_AXIS));
+		turntranshistory_panel.setPreferredSize(new Dimension(325,800));
+		turntranshistory_panel.add(Box.createRigidArea(new Dimension(0,50)));
 		
 		// Account Balance Title Label
 		account_title_label = new JLabel("Account Balance", SwingConstants.CENTER);
-		account_title_label.setBounds(100, 50, 200, 50);
-		contentPane.add(account_title_label);
+		account_title_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		balanceleaderboard_panel.add(account_title_label);
 		
 		// Account Balance Label
 		account_label = new JLabel("$0", SwingConstants.CENTER);
-		account_label.setBounds(100, 100, 200, 50);
-		contentPane.add(account_label);
+		account_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		balanceleaderboard_panel.add(account_label);
 				
 		// Ticker Label
 		ticker_label = new JLabel("Ticker", SwingConstants.CENTER);
-		ticker_label.setBounds(600, 100, 200, 50);
-		contentPane.add(ticker_label);
+		ticker_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		tickerplaybuttons_panel.add(ticker_label);
 		
 		// Price Label
 		price_label = new JLabel("0.00", SwingConstants.CENTER);
-		price_label.setBounds(600, 150, 200, 50);
-		contentPane.add(price_label);
+		price_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		tickerplaybuttons_panel.add(price_label);
 				
 		// Turn Count Title Label
 		turn_title_label = new JLabel("Turn Count", SwingConstants.CENTER);
-		turn_title_label.setBounds(1100, 50, 200, 50);
-		contentPane.add(turn_title_label);
+		turn_title_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		turntranshistory_panel.add(turn_title_label);
 		
 		// Turn Count Label
 		turn_label = new JLabel("0", SwingConstants.CENTER);
-		turn_label.setBounds(1100, 100, 200, 50);
-		contentPane.add(turn_label);
+		turn_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		turntranshistory_panel.add(turn_label);
 		
 		// Long Button
 		long_button = new JButton("Long");
-		long_button.setBounds(500, 550, 150, 50);
+		long_button.setPreferredSize(new Dimension(150, 50));
 		long_button.setBackground(Color.GREEN);
 		long_button.setOpaque(true);
-		contentPane.add(long_button);
+		playbuttons_panel.add(long_button);
 		
 		// Short Button
 		short_button = new JButton("Short");
-		short_button.setBounds(750, 550, 150, 50);
+		short_button.setPreferredSize(new Dimension(150,50));
 		short_button.setBackground(Color.RED);
-		contentPane.add(short_button);
+		playbuttons_panel.add(short_button);
 		
 		// Leaderboard Button
 		leaderboard_button = new JButton("Leaderboard");
-		leaderboard_button.setBounds(100, 650, 200, 50);
-		contentPane.add(leaderboard_button);
-
+		leaderboard_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		balanceleaderboard_panel.add(Box.createRigidArea(new Dimension(0,500)));
+		balanceleaderboard_panel.add(leaderboard_button);
+		
 		// Transaction History Button
 		transaction_button = new JButton("Transaction History");
-		transaction_button.setBounds(1100, 650, 200, 50);
-		contentPane.add(transaction_button);
+		transaction_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		turntranshistory_panel.add(Box.createRigidArea(new Dimension(0,500)));
+		turntranshistory_panel.add(transaction_button);
+		
+		encompassing_panel.add(balanceleaderboard_panel);
+		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,400)));
+		tickerplaybuttons_panel.add(playbuttons_panel);
+		encompassing_panel.add(tickerplaybuttons_panel);
+		encompassing_panel.add(turntranshistory_panel);
+		
+		contentPane.add(encompassing_panel);
 		
 		this.setLocationRelativeTo(null);
 	}
