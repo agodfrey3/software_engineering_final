@@ -51,7 +51,7 @@ public class StockGUI extends JFrame
 	}
 
 	public void fill_file_array() {
-		String main_dir = "./software_engineering_final/java_files/data/";
+		String main_dir = "../../software_engineering_final/java_files/data/";
 		File folder = new File(main_dir);
 		File[] listOfFiles = folder.listFiles();
 
@@ -97,7 +97,7 @@ public class StockGUI extends JFrame
 		JPanel balanceleaderboard_panel = new JPanel();
 		// Organizes components from top to bottom, starting with the first added component
 		balanceleaderboard_panel.setLayout(new BoxLayout(balanceleaderboard_panel, BoxLayout.Y_AXIS));
-		balanceleaderboard_panel.setPreferredSize(new Dimension(325,675));
+		balanceleaderboard_panel.setPreferredSize(new Dimension(300,600));
 		balanceleaderboard_panel.add(Box.createRigidArea(new Dimension(0,50)));
 		balanceleaderboard_panel.setBorder(BorderFactory.createLoweredBevelBorder());
 
@@ -105,8 +105,8 @@ public class StockGUI extends JFrame
 		// playbuttons_panel
 		JPanel tickerplaybuttons_panel = new JPanel();
 		tickerplaybuttons_panel.setLayout(new BoxLayout(tickerplaybuttons_panel, BoxLayout.Y_AXIS));
-		tickerplaybuttons_panel.setPreferredSize(new Dimension(550,750));
-		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,100))); //Pushes the ticker label to a lower position
+		tickerplaybuttons_panel.setPreferredSize(new Dimension(600,675));
+		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,25))); //Pushes the ticker label to a lower position
 		tickerplaybuttons_panel.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		// Panel that houses the stock graph
@@ -140,7 +140,7 @@ public class StockGUI extends JFrame
 		// the transaction history button
 		JPanel turntranshistory_panel = new JPanel();
 		turntranshistory_panel.setLayout(new BoxLayout(turntranshistory_panel, BoxLayout.Y_AXIS));
-		turntranshistory_panel.setPreferredSize(new Dimension(325,675));
+		turntranshistory_panel.setPreferredSize(new Dimension(300,600));
 		turntranshistory_panel.add(Box.createRigidArea(new Dimension(0,50)));
 		turntranshistory_panel.setBorder(BorderFactory.createLoweredBevelBorder());
 
@@ -233,40 +233,15 @@ public class StockGUI extends JFrame
 				t.start();
 			}
 		});
-		
-		/*JPanel dummyleft_panel = new JPanel();
-		dummyleft_panel.setLayout(new BoxLayout(dummyleft_panel, BoxLayout.Y_AXIS));
-		dummyleft_panel.setBorder(BorderFactory.createLineBorder(Color.black));
-		JPanel dummycenter_panel = new JPanel();
-		dummycenter_panel.setLayout(new BoxLayout(dummycenter_panel, BoxLayout.Y_AXIS));
-		dummycenter_panel.setBorder(BorderFactory.createLineBorder(Color.black));
-		JPanel dummyright_panel = new JPanel();
-		dummyright_panel.setLayout(new BoxLayout(dummyright_panel, BoxLayout.Y_AXIS));
-		dummycenter_panel.setBorder(BorderFactory.createLineBorder(Color.black));*/
-		
-		
-		/*dummyleft_panel.add(balanceleaderboard_panel);
-		dummyleft_panel.add(Box.createRigidArea(new Dimension(0,25)));
-		dummycenter_panel.add(tickerplaybuttons_panel);
-		dummyright_panel.add(turntranshistory_panel);*/
 
 
 		encompassing_panel.add(balanceleaderboard_panel);
 		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,25)));
 		tickerplaybuttons_panel.add(stockgraph_panel);
-		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,50)));
+		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,25)));
 		tickerplaybuttons_panel.add(playbuttons_panel);
-		//dummycenter_panel.add(tickerplaybuttons_panel);
-		//dummycenter_panel.add(Box.createRigidArea(new Dimension(0,10)));
 		encompassing_panel.add(tickerplaybuttons_panel);
 		encompassing_panel.add(turntranshistory_panel);
-		//dummyright_panel.add(turntranshistory_panel);
-		//dummyright_panel.add(Box.createRigidArea(new Dimension(0,10)));
-		
-		/*encompassing_panel.add(dummyleft_panel);
-		encompassing_panel.add(dummycenter_panel);
-		encompassing_panel.add(dummyright_panel);
-		*/
 
 		contentPane.add(encompassing_panel);
 
