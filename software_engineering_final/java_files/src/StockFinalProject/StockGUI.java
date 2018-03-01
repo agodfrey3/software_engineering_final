@@ -51,7 +51,7 @@ public class StockGUI extends JFrame
 	}
 
 	public void fill_file_array() {
-		String main_dir = "../../software_engineering_final/java_files/data/";
+		String main_dir = ".";
 		File folder = new File(main_dir);
 		File[] listOfFiles = folder.listFiles();
 
