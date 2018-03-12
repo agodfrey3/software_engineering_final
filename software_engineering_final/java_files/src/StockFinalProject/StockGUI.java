@@ -197,7 +197,78 @@ public class StockGUI extends JFrame
 		turntranshistory_panel.add(Box.createRigidArea(new Dimension(0,450)));
 		turntranshistory_panel.add(transaction_button);
 
-		transaction_button.addActionListener(new ActionListener() {
+		
+		long_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Thread t = new Thread(new Runnable()
+				{
+					public void run()
+					{
+						SocketUtilities su = new SocketUtilities();
+
+						if (su.socketConnect() == true)
+						{
+							su.sendMessage("Long");
+							String recvMsgStr = su.recvMessage();
+							su.sendMessage("QUIT>");
+
+							su.closeSocket();
+
+							JOptionPane.showMessageDialog(null,
+									"Message : " + recvMsgStr,
+									"Client",
+									JOptionPane.WARNING_MESSAGE);
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null,
+									"ERROR: Connection to Socket Server is Down!",
+									"Client",
+									JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				});
+				t.start();
+			}
+		});
+		
+		short_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Thread t = new Thread(new Runnable()
+				{
+					public void run()
+					{
+						SocketUtilities su = new SocketUtilities();
+
+						if (su.socketConnect() == true)
+						{
+							su.sendMessage("Short");
+							String recvMsgStr = su.recvMessage();
+							su.sendMessage("QUIT>");
+
+							su.closeSocket();
+
+							JOptionPane.showMessageDialog(null,
+									"Message : " + recvMsgStr,
+									"Client",
+									JOptionPane.WARNING_MESSAGE);
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null,
+									"ERROR: Connection to Socket Server is Down!",
+									"Client",
+									JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				});
+				t.start();
+			}
+		});
+		
+		leaderboard_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				Thread t = new Thread(new Runnable()
@@ -222,7 +293,7 @@ public class StockGUI extends JFrame
 						else
 						{
 							JOptionPane.showMessageDialog(null,
-									"ERROR:Connection To Socket Server is Down!",
+									"ERROR: Connection to Socket Server is Down!",
 									"Client",
 									JOptionPane.WARNING_MESSAGE);
 						}
@@ -231,7 +302,41 @@ public class StockGUI extends JFrame
 				t.start();
 			}
 		});
+		
+		transaction_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Thread t = new Thread(new Runnable()
+				{
+					public void run()
+					{
+						SocketUtilities su = new SocketUtilities();
 
+						if (su.socketConnect() == true)
+						{
+							su.sendMessage("Transaction History");
+							String recvMsgStr = su.recvMessage();
+							su.sendMessage("QUIT>");
+
+							su.closeSocket();
+
+							JOptionPane.showMessageDialog(null,
+									"Message : " + recvMsgStr,
+									"Client",
+									JOptionPane.WARNING_MESSAGE);
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null,
+									"ERROR: Connection to Socket Server is Down!",
+									"Client",
+									JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				});
+				t.start();
+			}
+		});
 
 		encompassing_panel.add(balanceleaderboard_panel);
 		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,25)));
