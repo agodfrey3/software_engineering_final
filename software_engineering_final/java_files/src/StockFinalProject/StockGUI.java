@@ -33,6 +33,8 @@ public class StockGUI extends JFrame
 	private JLabel account_title_label;
 	private JLabel account_label;
 	private JLabel turn_title_label;
+	private JLabel playertext_label;
+	private JLabel playercount_label;
 	private JLabel turn_label;
 	private JLabel ticker_label;
 	private JLabel price_label;
@@ -134,12 +136,24 @@ public class StockGUI extends JFrame
 		playbuttons_panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		//playbuttons_panel.setBorder(BorderFactory.createLineBorder(Color.black));
 
+		//Panel for number of player counter
+		JPanel playercount_panel = new JPanel();
+		playercount_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0));
+		//playercount_panel.setPreferredSize(new Dimension(300, 20));
+		playercount_panel.setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		//Panel that houses right side of gui
+		JPanel right_panel = new JPanel();
+		right_panel.setLayout(new BoxLayout(right_panel, BoxLayout.Y_AXIS));
+		right_panel.setPreferredSize(new Dimension(300, 600));
+		right_panel.setBorder(BorderFactory.createLineBorder(Color.black));
+		
 		// Panel that houses the turn counter (title label and count label) and
 		// the transaction history button
 		JPanel turntranshistory_panel = new JPanel();
 		turntranshistory_panel.setLayout(new BoxLayout(turntranshistory_panel, BoxLayout.Y_AXIS));
-		turntranshistory_panel.setPreferredSize(new Dimension(300,600));
-		turntranshistory_panel.add(Box.createRigidArea(new Dimension(0,50)));
+		turntranshistory_panel.setPreferredSize(new Dimension(300,570));
+		turntranshistory_panel.add(Box.createRigidArea(new Dimension(0,22)));
 		turntranshistory_panel.setBorder(BorderFactory.createLoweredBevelBorder());
 
 		// Account Balance Title Label
@@ -167,11 +181,22 @@ public class StockGUI extends JFrame
 		turn_title_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		turntranshistory_panel.add(turn_title_label);
 
+		// Current players Label	
+		playertext_label = new JLabel("Players Currently Playing: ", SwingConstants.CENTER);
+		playertext_label.setAlignmentX(Component.LEFT_ALIGNMENT);
+		playercount_panel.add(playertext_label);
+		
+		// Number of players currently playing Label
+		playercount_label = new JLabel("0", SwingConstants.CENTER);
+		playercount_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		playercount_panel.add(playercount_label);
+		right_panel.add(playercount_panel);
+		
 		// Turn Count Label
 		turn_label = new JLabel("0", SwingConstants.CENTER);
 		turn_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		turntranshistory_panel.add(turn_label);
-
+		
 		// Long Button
 		long_button = new JButton("Long");
 		long_button.setPreferredSize(new Dimension(150, 50));
@@ -190,7 +215,7 @@ public class StockGUI extends JFrame
 		leaderboard_button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		balanceleaderboard_panel.add(Box.createRigidArea(new Dimension(0,450)));
 		balanceleaderboard_panel.add(leaderboard_button);
-
+		
 		// Transaction History Button
 		transaction_button = new JButton("Transaction History");
 		transaction_button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -344,8 +369,8 @@ public class StockGUI extends JFrame
 		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,25)));
 		tickerplaybuttons_panel.add(playbuttons_panel);
 		encompassing_panel.add(tickerplaybuttons_panel);
-		encompassing_panel.add(turntranshistory_panel);
-
+		right_panel.add(turntranshistory_panel);
+		encompassing_panel.add(right_panel);
 		contentPane.add(encompassing_panel);
 
 		this.setLocationRelativeTo(null);
