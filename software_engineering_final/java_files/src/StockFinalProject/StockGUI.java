@@ -29,11 +29,14 @@ import java.io.ObjectOutputStream;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-public class StockGUI extends JFrame
+public class StockGUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 
+	private static JFrame app_frame;
 	private JPanel contentPane;
+	
+	private static String username_user;
 	private JButton long_button;
 	private JButton short_button;
 	private JButton leaderboard_button;
@@ -65,7 +68,7 @@ public class StockGUI extends JFrame
 				 while (true)
 				 {	 			      
 					   Date date = new Date();
-					   String str = String.format("  %tc", date);
+					   String str = String.format("       %tc", date);
 					 
 				   clock_textarea.setText("");
 				   clock_textarea.append(str);
@@ -89,10 +92,71 @@ public class StockGUI extends JFrame
 	
 	public static void main(String[] args)
 	{
-		StockGUI frame = new StockGUI();
-		frame.setVisible(true);
+		createAppFrame();
 	}
 
+	public static void createAppFrame() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		app_frame = new JFrame();
+		app_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		app_frame.setSize(500,90);
+		app_frame.setLocationRelativeTo(null);
+		app_frame.setTitle("Welcome!");
+		
+		JPanel encompassing_panel = new JPanel();
+		encompassing_panel.setBackground(new Color(24, 110, 155));
+		app_frame.setContentPane(encompassing_panel);
+		encompassing_panel.setLayout(new BoxLayout(encompassing_panel, BoxLayout.Y_AXIS));
+		
+		JPanel field_panel = new JPanel();
+		field_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		field_panel.setBackground(new Color(24, 110, 155));
+		
+		JLabel username_label = new JLabel("Choose your username:", SwingConstants.CENTER);
+		username_label.setFont(new Font("Lucida Sans Unicode", Font.BOLD, 15));
+		username_label.setForeground(Color.white);
+		
+		JTextField username_textfield = new JTextField();
+		username_textfield.setColumns(12);
+		username_textfield.setPreferredSize(new Dimension(0,25));
+		
+		JButton accept_button = new JButton("Accept");
+		accept_button.setPreferredSize(new Dimension(150, 25));
+		accept_button.setBackground(new Color(196, 236, 237));
+		accept_button.setOpaque(true);
+		accept_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		field_panel.add(username_label);
+		field_panel.add(username_textfield);
+		encompassing_panel.add(field_panel);
+		encompassing_panel.add(Box.createRigidArea(new Dimension(0,5)));
+		encompassing_panel.add(accept_button);
+		encompassing_panel.add(Box.createRigidArea(new Dimension(0,5)));
+		app_frame.setContentPane(encompassing_panel);
+		app_frame.setVisible(true);
+		
+		accept_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				StockGUI game_frame = new StockGUI();
+				app_frame.getContentPane().removeAll();
+				app_frame.setContentPane(game_frame);
+				app_frame.revalidate();
+				app_frame.pack();
+				app_frame.setLocationRelativeTo(null);
+				app_frame.setSize(new Dimension(1225, 715));
+				username_user = username_textfield.getText();
+				app_frame.setTitle("Stock Market Game: Welcome " + username_user + "!");
+				app_frame.setVisible(true);
+			}	
+		});
+	}
+	
 	public void fill_file_array() {
 		String main_dir = "./data/";
 		File folder = new File(main_dir);
@@ -111,22 +175,11 @@ public class StockGUI extends JFrame
 	 * Create the frame.
 	 */
 	public StockGUI()
-	{
-		try {
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
+	{	
 		fill_file_array();
-
-		setTitle("The Stock Market Game");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1225, 800);
-
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5)); // Top, Left, Bottom, Right
-		setContentPane(contentPane);
 		contentPane.setBackground(new Color(24, 110, 155));
 
 		// Second-degree panel to contentPane
@@ -279,7 +332,7 @@ public class StockGUI extends JFrame
 		// Real time clock text area
 		clock_textarea = new JTextArea();
 		clock_textarea.setEditable(false);
-		clock_textarea.setFont(new Font("Monospaced", Font.PLAIN, 15));
+		clock_textarea.setFont(new Font("Lucia Sans Unicode", Font.PLAIN, 15));
 		clock_textarea.setRows(1);
 		clock_textarea.setColumns(36);
 		
@@ -503,7 +556,7 @@ public class StockGUI extends JFrame
 				t.start();
 			}
 		});*/
-
+		
 		encompassing_panel.add(balanceleaderboard_panel);
 		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,20)));
 		tickerplaybuttons_panel.add(stockgraph_panel);
@@ -515,9 +568,8 @@ public class StockGUI extends JFrame
 		right_panel.add(leaderboard_button);
 		right_panel.add(Box.createRigidArea(new Dimension(0,25)));
 		encompassing_panel.add(right_panel);
-		contentPane.add(encompassing_panel);
+		add(encompassing_panel);
 
 		startRealTimeClock();
-		this.setLocationRelativeTo(null);
 	}
 }
