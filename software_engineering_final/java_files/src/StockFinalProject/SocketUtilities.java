@@ -37,7 +37,7 @@ public class SocketUtilities
 	        }
 	        else
 	        {
-	           ipAddress  = "localhost";
+	           ipAddress  = "10.88.71.18";
 	           portNumber = 3333;
 	        }
   
