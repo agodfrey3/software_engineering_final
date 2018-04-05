@@ -110,10 +110,10 @@ public class SocketServerGUI extends JFrame
 		contentPane.add(panel);
 		
 		textArea = new JTextArea();
-		textArea.setFont(new Font("Monospaced", Font.BOLD, 16));
+		textArea.setFont(new Font("Monospaced", Font.BOLD, 10));
 		textArea.setEditable(false);
-		textArea.setRows(15);
-		textArea.setColumns(46);
+		textArea.setRows(26); //15
+		textArea.setColumns(85); //46
 		panel.add(textArea);
 		
 		JScrollPane txt_more_info_pane = new JScrollPane(textArea);  

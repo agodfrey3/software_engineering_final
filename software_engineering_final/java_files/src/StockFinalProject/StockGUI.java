@@ -12,6 +12,7 @@ import javax.swing.text.DefaultCaret;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 import java.io.File;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,6 +38,14 @@ public class StockGUI extends JPanel
 	private JPanel contentPane;
 	
 	private static String username_user;
+	// Tracks user's number of turns played
+	private static Integer turnCounter;
+	// Tracks user's set of longed stocks ==> stores actual stock symbols
+	// Index of stock symbols start at 1
+	private Vector<String> stockslonged_vector = new Vector<String>();
+	// Tracks user's set of shorted stocks ==> stores actual stock symbols
+	// Index of stock symbols start at 1
+	private Vector<String> stocksshorted_vector = new Vector<String>();
 	private JButton long_button;
 	private JButton short_button;
 	private JButton leaderboard_button;
@@ -48,7 +57,7 @@ public class StockGUI extends JPanel
 	private JLabel turn_title_label;
 	private JLabel playertext_label;
 	private JLabel playercount_label;
-	private JLabel turn_label;
+	private JLabel turncounter_label;
 	private JLabel ticker_label;
 	private JLabel price_label;
 	private JTextArea clock_textarea;
@@ -92,10 +101,12 @@ public class StockGUI extends JPanel
 	
 	public static void main(String[] args)
 	{
-		createAppFrame();
+		createStartingFrame();
 	}
 
-	public static void createAppFrame() {
+	// Function creates frame/window that asks for user's desired username
+	// before transitioning to stock market game
+	public static void createStartingFrame() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		}catch(Exception e){
@@ -139,7 +150,7 @@ public class StockGUI extends JPanel
 		encompassing_panel.add(Box.createRigidArea(new Dimension(0,5)));
 		app_frame.setContentPane(encompassing_panel);
 		app_frame.setVisible(true);
-		
+				
 		accept_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -177,6 +188,8 @@ public class StockGUI extends JPanel
 	public StockGUI()
 	{	
 		fill_file_array();
+		stockslonged_vector.add("Longed ");
+		stocksshorted_vector.add("Shorted ");
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5)); // Top, Left, Bottom, Right
@@ -351,10 +364,10 @@ public class StockGUI extends JPanel
 		right_panel.add(Box.createRigidArea(new Dimension(0,10)));
 		
 		// Turn Count Label
-		turn_label = new JLabel("0", SwingConstants.CENTER);
-		turn_label.setFont(new Font(turn_label.getFont().getName(), turn_label.getFont().getStyle(), 15));
-		turn_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		turntranshistory_panel.add(turn_label);
+		turncounter_label = new JLabel("0", SwingConstants.CENTER);
+		turncounter_label.setFont(new Font(turncounter_label.getFont().getName(), turncounter_label.getFont().getStyle(), 15));
+		turncounter_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		turntranshistory_panel.add(turncounter_label);
 		
 		// Long Button
 		long_button = new JButton("Long");
@@ -397,36 +410,40 @@ public class StockGUI extends JPanel
 				transhistorydisplay_panel.validate();
 				transhistorydisplay_panel.repaint();
 				
+				stockslonged_vector.add("New Stock");
+				//turnCounter = turnCounter + 1;
+				
 				Thread t = new Thread(new Runnable()
 				{
 					public void run()
 					{
 						SocketUtilities su = new SocketUtilities();
-
 						if (su.socketConnect() == true)
 						{
-							/*su.sendMessage("Long");
-							String recvMsgStr = su.recvMessage();
-							su.sendMessage("QUIT>");
-							*/
+							if(su.client_username.toString().equals(""))
+								su.client_username.append(username_user);
 							
-							ObjectOutputStream outputStream;
-							try {
-								outputStream = new ObjectOutputStream(su.clientSocket.getOutputStream());
-								String[] names = new String[1]; // Empty at the moment
-								names[0] = "Fart";
-								outputStream.writeObject(names[0]);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							//Sending a simple string works
+							// Sending an element of an array works
+							su.sendMessage(stockslonged_vector);
+							//su.sendCountData(turnCounter);
+							
+//							String recvMsgStr = su.recvMessage();
+//							su.sendMessage("QUIT>");
+							
+//							ObjectOutputStream outputStream;
+//							try {
+//								outputStream = new ObjectOutputStream(su.clientSocket.getOutputStream());
+//								String[] names = new String[1]; // Empty at the moment
+//								names[0] = "Fart";
+//								String temp = "fart";
+//								outputStream.writeObject(temp);
+//							} catch (IOException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
 							
 							su.closeSocket();
-
-							/*JOptionPane.showMessageDialog(null,
-									"Message : " + recvMsgStr,
-									"Client",
-									JOptionPane.WARNING_MESSAGE);*/
 						}
 						else
 						{
@@ -455,24 +472,29 @@ public class StockGUI extends JPanel
 				transhistorydisplay_panel.validate();
 				transhistorydisplay_panel.repaint();
 				
+				stocksshorted_vector.add("New Stock");
+				
 				Thread t = new Thread(new Runnable()
 				{
 					public void run()
 					{
 						SocketUtilities su = new SocketUtilities();
-
 						if (su.socketConnect() == true)
 						{
-							su.sendMessage("Short");
-							String recvMsgStr = su.recvMessage();
-							su.sendMessage("QUIT>");
-
-							su.closeSocket();
-
-							JOptionPane.showMessageDialog(null,
-									"Message : " + recvMsgStr,
-									"Client",
-									JOptionPane.WARNING_MESSAGE);
+							if(su.client_username.toString().equals(""))
+								su.client_username.append(username_user);
+							
+							su.sendMessage(stocksshorted_vector);
+							
+//							String recvMsgStr = su.recvMessage();
+//							su.sendMessage("QUIT>");
+//
+//							su.closeSocket();
+//
+//							JOptionPane.showMessageDialog(null,
+//									"Message : " + recvMsgStr,
+//									"Client",
+//									JOptionPane.WARNING_MESSAGE);
 						}
 						else
 						{
@@ -490,35 +512,35 @@ public class StockGUI extends JPanel
 		leaderboard_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				Thread t = new Thread(new Runnable()
-				{
-					public void run()
-					{
-						SocketUtilities su = new SocketUtilities();
-
-						if (su.socketConnect() == true)
-						{
-							su.sendMessage("Hello there.");
-							String recvMsgStr = su.recvMessage();
-							su.sendMessage("QUIT>");
-
-							su.closeSocket();
-
-							JOptionPane.showMessageDialog(null,
-									"Message : " + recvMsgStr,
-									"Client",
-									JOptionPane.WARNING_MESSAGE);
-						}
-						else
-						{
-							JOptionPane.showMessageDialog(null,
-									"ERROR: Connection to Socket Server is Down!",
-									"Client",
-									JOptionPane.WARNING_MESSAGE);
-						}
-					}
-				});
-				t.start();
+//				Thread t = new Thread(new Runnable()
+//				{
+//					public void run()
+//					{
+//						SocketUtilities su = new SocketUtilities();
+//
+//						if (su.socketConnect() == true)
+//						{
+//							su.sendMessage("Hello there.");
+//							String recvMsgStr = su.recvMessage();
+//							su.sendMessage("QUIT>");
+//
+//							su.closeSocket();
+//
+//							JOptionPane.showMessageDialog(null,
+//									"Message : " + recvMsgStr,
+//									"Client",
+//									JOptionPane.WARNING_MESSAGE);
+//						}
+//						else
+//						{
+//							JOptionPane.showMessageDialog(null,
+//									"ERROR: Connection to Socket Server is Down!",
+//									"Client",
+//									JOptionPane.WARNING_MESSAGE);
+//						}
+//					}
+//				});
+//				t.start();
 			}
 		});
 		

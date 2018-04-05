@@ -150,10 +150,13 @@ public class SocketServer implements Runnable
 	      {
 	       	if (rstream.ready())   // check for any data messages
 	       	{
+	       		//ObjectInputStream ois = new ObjectInputStream(csocket.getInputStream());
+	            //String tempString = ois.readObject();
+	            //String unravel = clientString.toString();
 	              clientString = rstream.readLine();
 	              
 	              // update the status text area to show progress of program
-	   	           SocketServerGUI.textArea.append("RECV : " + clientString + newline);
+	   	           SocketServerGUI.textArea.append("User: " + clientString + newline);
 	     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	     	       SocketServerGUI.textArea.repaint();
 	     	       // update the status text area to show progress of program
