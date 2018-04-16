@@ -29,17 +29,20 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.text.DecimalFormat;
 
 public class StockGUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-
+	
 	private static JFrame app_frame;
 	private JPanel contentPane;
 	
 	private static String username_user;
 	// Tracks user's number of turns played
-	private static Integer turnCounter;
+	private static Integer turnCounter = 0;
+	// The value of the player's account
+	private static Double accountValue;
 	// Tracks user's set of longed stocks ==> stores actual stock symbols
 	// Index of stock symbols start at 1
 	private Vector<String> stockslonged_vector = new Vector<String>();
@@ -103,7 +106,7 @@ public class StockGUI extends JPanel
 	{
 		createStartingFrame();
 	}
-
+	
 	// Function creates frame/window that asks for user's desired username
 	// before transitioning to stock market game
 	public static void createStartingFrame() {
@@ -302,7 +305,8 @@ public class StockGUI extends JPanel
 		balanceleaderboard_panel.add(account_title_label);
 		
 		// Account Balance Label
-		account_label = new JLabel("$0", SwingConstants.CENTER);
+		accountValue = 10000.00;
+		account_label = new JLabel("$" + accountValue.toString(), SwingConstants.CENTER);
 		account_label.setFont(new Font(account_label.getFont().getName(), account_label.getFont().getStyle(), 15));
 		account_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		balanceleaderboard_panel.add(account_label);
@@ -314,7 +318,7 @@ public class StockGUI extends JPanel
 		lastgained_label.setFont(new Font(lastgained_label.getFont().getName(), lastgained_label.getFont().getStyle(), 15));
 		lastgained_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		pointsgained_label = new JLabel("+35", SwingConstants.CENTER);
+		pointsgained_label = new JLabel("+0", SwingConstants.CENTER);
 		pointsgained_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pointsgained_label.setFont(new Font(pointsgained_label.getFont().getName(), pointsgained_label.getFont().getStyle(), 50));
 		pointsgained_label.setPreferredSize(new Dimension(125, 100));
@@ -399,6 +403,9 @@ public class StockGUI extends JPanel
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				turnCounter += 1;
+				turncounter_label.setText(turnCounter.toString());
+				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Long this stock");
 				editable_label.setAlignmentX(CENTER_ALIGNMENT);
@@ -461,6 +468,10 @@ public class StockGUI extends JPanel
 		short_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				
+				turnCounter += 1;
+				turncounter_label.setText(turnCounter.toString());
+				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Short this stock");
 				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
