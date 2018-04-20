@@ -18,7 +18,9 @@ public class SocketServer implements Runnable
 	   String ipString;
 	   char threadType;
 
-	   static Vector<String> vec = new Vector<String>(5);
+	   //static Vector<String> vec = new Vector<String>(5);
+	   
+	   static Vector<SGUsers> users_playing = new Vector<SGUsers>();
 	   
 	   static final String newline = "\n";
 	   static int first_time = 1;
@@ -86,7 +88,7 @@ public class SocketServer implements Runnable
 		    }
 		 
 		    // update the status text area to show progress of program
-	        SocketServerGUI.textArea.append("Client Connected : " + sock.getInetAddress() + newline);
+	        SocketServerGUI.textArea.append("Client Connected: " + sock.getInetAddress() + newline);
 	        SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	        SocketServerGUI.textArea.repaint();
 	        
