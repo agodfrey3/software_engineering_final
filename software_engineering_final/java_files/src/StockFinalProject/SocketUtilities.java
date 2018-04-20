@@ -73,17 +73,16 @@ public class SocketUtilities
 		
 		try 
 		{
-			StringBuilder clientdata_strb = new StringBuilder();
-			clientdata_strb.append(client_username.toString());
-			clientdata_strb.append(" ==> ");
-			
-			for(int i=0; i<msg.size(); i++) {
-				clientdata_strb.append(msg.get(i));
-				clientdata_strb.append(" | ");
-				
-			}
-			
-			String clientdata_fullstr = clientdata_strb.toString();
+//			StringBuilder clientdata_strb = new StringBuilder();
+//			clientdata_strb.append(client_username.toString());
+//			clientdata_strb.append(" ==> ");
+//			
+//			for(int i=0; i<msg.size(); i++) {
+//				clientdata_strb.append(msg.get(i));
+//				clientdata_strb.append(" | ");
+//			}
+//			
+//			String clientdata_fullstr = clientdata_strb.toString();
 			
 			// StringBuilder works
 			// Can also access array element as long as index is specified

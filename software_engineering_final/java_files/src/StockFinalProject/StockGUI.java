@@ -37,15 +37,16 @@ public class StockGUI extends JPanel
 	private static JFrame app_frame;
 	private JPanel contentPane;
 	
-	private static String username_user;
+	private static SGUsers newuser_obj = new SGUsers();
+	//private static String username_user;
 	// Tracks user's number of turns played
-	private static Integer turnCounter;
+	//private static Integer turnCounter;
 	// Tracks user's set of longed stocks ==> stores actual stock symbols
 	// Index of stock symbols start at 1
-	private Vector<String> stockslonged_vector = new Vector<String>();
+	//private Vector<String> stockslonged_vector = new Vector<String>();
 	// Tracks user's set of shorted stocks ==> stores actual stock symbols
 	// Index of stock symbols start at 1
-	private Vector<String> stocksshorted_vector = new Vector<String>();
+	//private Vector<String> stocksshorted_vector = new Vector<String>();
 	private JButton long_button;
 	private JButton short_button;
 	private JButton leaderboard_button;
@@ -153,7 +154,7 @@ public class StockGUI extends JPanel
 				
 		accept_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
-			{
+			{	
 				StockGUI game_frame = new StockGUI();
 				app_frame.getContentPane().removeAll();
 				app_frame.setContentPane(game_frame);
@@ -161,8 +162,31 @@ public class StockGUI extends JPanel
 				app_frame.pack();
 				app_frame.setLocationRelativeTo(null);
 				app_frame.setSize(new Dimension(1225, 715));
-				username_user = username_textfield.getText();
-				app_frame.setTitle("Stock Market Game: Welcome " + username_user + "!");
+				newuser_obj.setUserName(username_textfield.getText());
+//				Thread t = new Thread(new Runnable()
+//				{
+//					public void run()
+//					{
+//						SocketUtilities su = new SocketUtilities();
+//						if (su.socketConnect() == true)
+//						{
+//							//if(su.client_username.toString().equals(""))
+//							//	su.client_username.append(username_user);
+//
+//							//su.sendMessage(stockslonged_vector);
+//							su.closeSocket();
+//						}
+//						else
+//						{
+//							JOptionPane.showMessageDialog(null,
+//									"ERROR: Connection to Socket Server is Down!",
+//									"Client",
+//									JOptionPane.WARNING_MESSAGE);
+//						}
+//					}
+//				});
+//				t.start();
+				app_frame.setTitle("Stock Market Game: Welcome " + newuser_obj.getUserName() + "!");
 				app_frame.setVisible(true);
 			}	
 		});
@@ -188,8 +212,8 @@ public class StockGUI extends JPanel
 	public StockGUI()
 	{	
 		fill_file_array();
-		stockslonged_vector.add("Longed ");
-		stocksshorted_vector.add("Shorted ");
+		//stockslonged_vector.add("Longed ");
+		//stocksshorted_vector.add("Shorted ");
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5)); // Top, Left, Bottom, Right
@@ -302,7 +326,7 @@ public class StockGUI extends JPanel
 		balanceleaderboard_panel.add(account_title_label);
 		
 		// Account Balance Label
-		account_label = new JLabel("$0", SwingConstants.CENTER);
+		account_label = new JLabel(Double.toString(newuser_obj.getBalance()), SwingConstants.CENTER);
 		account_label.setFont(new Font(account_label.getFont().getName(), account_label.getFont().getStyle(), 15));
 		account_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		balanceleaderboard_panel.add(account_label);
@@ -364,7 +388,7 @@ public class StockGUI extends JPanel
 		right_panel.add(Box.createRigidArea(new Dimension(0,10)));
 		
 		// Turn Count Label
-		turncounter_label = new JLabel("0", SwingConstants.CENTER);
+		turncounter_label = new JLabel(Integer.toString(newuser_obj.getTurnCounter()), SwingConstants.CENTER);
 		turncounter_label.setFont(new Font(turncounter_label.getFont().getName(), turncounter_label.getFont().getStyle(), 15));
 		turncounter_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		turntranshistory_panel.add(turncounter_label);
@@ -410,8 +434,9 @@ public class StockGUI extends JPanel
 				transhistorydisplay_panel.validate();
 				transhistorydisplay_panel.repaint();
 				
-				stockslonged_vector.add("New Stock");
-				//turnCounter = turnCounter + 1;
+				newuser_obj.addToStocksLonged("New Stock");
+				newuser_obj.addToTurnCounter();
+				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				
 				Thread t = new Thread(new Runnable()
 				{
@@ -419,13 +444,10 @@ public class StockGUI extends JPanel
 					{
 						SocketUtilities su = new SocketUtilities();
 						if (su.socketConnect() == true)
-						{
-							if(su.client_username.toString().equals(""))
-								su.client_username.append(username_user);
-							
+						{	
 							//Sending a simple string works
 							// Sending an element of an array works
-							su.sendMessage(stockslonged_vector);
+							//su.sendMessage(stockslonged_vector);
 							//su.sendCountData(turnCounter);
 							
 //							String recvMsgStr = su.recvMessage();
@@ -472,7 +494,9 @@ public class StockGUI extends JPanel
 				transhistorydisplay_panel.validate();
 				transhistorydisplay_panel.repaint();
 				
-				stocksshorted_vector.add("New Stock");
+				newuser_obj.addToStocksShorted("New Stock");
+				newuser_obj.addToTurnCounter();
+				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				
 				Thread t = new Thread(new Runnable()
 				{
@@ -480,11 +504,8 @@ public class StockGUI extends JPanel
 					{
 						SocketUtilities su = new SocketUtilities();
 						if (su.socketConnect() == true)
-						{
-							if(su.client_username.toString().equals(""))
-								su.client_username.append(username_user);
-							
-							su.sendMessage(stocksshorted_vector);
+						{	
+							//su.sendMessage(stocksshorted_vector);
 							
 //							String recvMsgStr = su.recvMessage();
 //							su.sendMessage("QUIT>");
