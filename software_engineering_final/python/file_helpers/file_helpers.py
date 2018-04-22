@@ -1,4 +1,19 @@
 import pickle
+from os import listdir
+from os.path import isfile, join
+
+
+def get_files_in_dir(dir: str):
+    """
+    Returns a list of the file's full filespaths from the passed directory.
+    :param dir: The directory to search through.
+    :return: A list of filenames.
+    """
+
+    file_list = [f"{dir}/{file}" for file in listdir(dir) if isfile(join(dir, file))]
+
+    return file_list
+
 
 def save_pkl_file(o, p):
     """

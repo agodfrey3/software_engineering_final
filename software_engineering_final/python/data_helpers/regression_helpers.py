@@ -61,6 +61,7 @@ def split_time_series(df: pd.DataFrame, chunk_size: int, target_col: float='pric
     for i in range(df_size - chunk_size - 1):
         row = {'X': df.iloc[i:i+chunk_size-1][target_col].values.tolist(), 'y': df.iloc[i+chunk_size][target_col]}
         rows.append(row)
+
     return pd.DataFrame(rows)
 
 

@@ -41,7 +41,7 @@ def fetch_stock_data_helper(stock: str, period: str, verbose: bool=False):
     return price_df
 
 
-def fetch_stock_data(stocks: List[str], period: str, verbose: bool=False, save: bool=False, save_dir: str=None):
+def fetch_stock_data(stocks: List[str], period: str='5y', verbose: bool=False, save: bool=False, save_dir: str=None):
     """
     Use this function to create DataFrames of information based on a list of stock symbols
     over a certain period of time.

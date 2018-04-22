@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 
 from sklearn.metrics import mean_squared_error
 
-
 def plot_results(X_test, y_test, y_pred):
     """
     Plots the data points against the resulting model.
@@ -11,6 +10,7 @@ def plot_results(X_test, y_test, y_pred):
     :param y_test: Actual y values.
     :param y_pred: Model's predicted y values.
     """
+
     plt.scatter(X_test, y_test, color='black')
     plt.plot(X_test, y_pred, color='blue', linewidth=3)
 
