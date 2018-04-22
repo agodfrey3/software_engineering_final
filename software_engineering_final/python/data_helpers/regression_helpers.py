@@ -1,6 +1,8 @@
 import pandas as pd
 from ast import literal_eval
 import numpy as np
+import os
+from typing import List
 
 
 def format_X_y(df: pd.DataFrame, X_col: str='X', y_col: str='y'):
@@ -25,7 +27,7 @@ def time_series_to_X(df: pd.DataFrame, X_col: str='X'):
     :return: numpy.array of X values.
     """
     df['X'] = df['X'].apply(lambda x: literal_eval(x))
-    return df['X'].tolist()
+    return np.asarray(df['X'].tolist())
 
 
 def split_train_test(df: pd.DataFrame, percent: float=0.8):
@@ -65,15 +67,31 @@ def split_time_series(df: pd.DataFrame, chunk_size: int, target_col: float='pric
     return pd.DataFrame(rows)
 
 
+def combine_data_from_dir(save_name: str, search_dir: str, save_dir: str, chunk_sizes: List[int]=[5]):
+
+    master_df = pd.DataFrame()
+
+    for chunk_size in chunk_sizes:
+        for filename in os.listdir(search_dir):
+            if filename.endswith(".csv"):
+                print(f"Formatting {filename}")
+
+                df = pd.read_csv(f"{search_dir}/{filename}", encoding='utf-8')
+
+                df = split_time_series(df, chunk_size=10)
+
+                master_df = master_df.append(df)
+
+        print(f"Saving df to {save_dir}/{save_name}_chunk_{chunk_size}.csv")
+        master_df.to_csv(f"{save_dir}/{save_name}_chunk_{chunk_size}.csv", index=False, encoding='utf-8')
+
 def main():
-    load_path = "C:/Users/God/data/stock_data/goog_ytd.csv"
-    save_path = "C:/Users/God/data/stock_data/formatted/google_pred_test_ytd.csv"
+    main_dir = "C:/Users/Andrew/data/stock_data/"
+    save_dir = "C:/Users/Andrew/data/stock_data/formatted/validation"
 
-    df = pd.read_csv(load_path, encoding='utf-8')
+    validation_dir = os.path.join(main_dir, "validation")
 
-    df = split_time_series(df, chunk_size=20)
-
-    df.to_csv(save_path, index=False, encoding='utf-8')
+    combine_data_from_dir("justin_validation", search_dir=validation_dir, save_dir=save_dir)
 
 
 if __name__ == '__main__':

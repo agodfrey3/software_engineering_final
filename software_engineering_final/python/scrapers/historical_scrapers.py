@@ -89,5 +89,13 @@ def save_resulting_data(dataframes: Dict[str, pd.DataFrame], save_dir: str):
 
 
 if __name__ == '__main__':
-    save_dir = "C:/Users/God/data/stock_data"
-    df = fetch_stock_data(['goog'], 'ytd', save=True, save_dir=save_dir)
+    save_dir = "C:/Users/Andrew/data/stock_data"
+    validation_save_dir = os.path.join(save_dir, "validation")
+    training_save_dir = os.path.join(save_dir, "training")
+
+    dow_30 = ['axp', 'aapl', 'cat', 'csco', 'cvx', 'xom', 'ge', 'gs', 'hd', 'ibm', 'intc', 'jnj', 'ko', 'jpm', 'mcd',
+              'mmm', 'mrk', 'msft', 'nke', 'pfe', 'pg', 'trv', 'unh', 'utx', 'vz', 'v', 'wmt', 'dis', 'dwdp']
+
+    justin_validation = ['jnug', 'jdst', 'uwti', 'dwti']
+
+    df = fetch_stock_data(justin_validation, '5y', save=True, save_dir=validation_save_dir)

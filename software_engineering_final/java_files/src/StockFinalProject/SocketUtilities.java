@@ -1,3 +1,6 @@
+package StockFinalProject;
+
+import java.util.Vector;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -13,6 +16,7 @@ public class SocketUtilities
 	Socket clientSocket=null;
     DataOutputStream outToServer=null;
     BufferedReader inFromServer=null;
+    StringBuilder client_username = new StringBuilder("");
 
 	public boolean socketConnect()
 	{
@@ -63,13 +67,26 @@ public class SocketUtilities
 		return rc;
 	}
 	
-	public boolean sendMessage(String msg)
+	public boolean sendMessage(Vector<String> msg)
 	{
 		boolean rc=false;
 		
 		try 
 		{
-			outToServer.writeBytes("DataEntry>" + msg + "\r\n");
+//			StringBuilder clientdata_strb = new StringBuilder();
+//			clientdata_strb.append(client_username.toString());
+//			clientdata_strb.append(" ==> ");
+//			
+//			for(int i=0; i<msg.size(); i++) {
+//				clientdata_strb.append(msg.get(i));
+//				clientdata_strb.append(" | ");
+//			}
+//			
+//			String clientdata_fullstr = clientdata_strb.toString();
+			
+			// StringBuilder works
+			// Can also access array element as long as index is specified
+			outToServer.writeBytes(clientdata_fullstr + "\r\n");
 			rc = true;
 		}
 		catch (IOException e)
@@ -80,6 +97,24 @@ public class SocketUtilities
 		
 		return rc;
 	}
+	
+//	public boolean sendCountData(Integer msg)
+//	{
+//		boolean rc=false;
+//		
+//		try 
+//		{
+//			outToServer.writeBytes("DataEntry>" + msg + "\r\n");
+//			rc = true;
+//		}
+//		catch (IOException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		return rc;
+//	}
 	
 	public String recvMessage()
 	{
