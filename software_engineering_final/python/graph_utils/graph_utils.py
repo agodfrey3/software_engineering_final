@@ -1,14 +1,7 @@
 import pandas as pd
-import plotly.plotly as py
-import plotly.graph_objs as go
 import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 import numpy as np
-
-from datetime import datetime
-
-def create_graph_from_df(df):
-    data = [go.Scatter(x=df['date'], y=df['price'])]
-    py.iplot(data, filename="test_plot")
 
 
 def format_df_for_graph(df):
@@ -22,20 +15,28 @@ def format_df_for_graph(df):
 
 def main():
 
-    data_path = "C:/Users/Andrew/IdeaProjects/software_engineering_final/" \
-                "software_engineering_final/python/data/aapl_5y.csv"
+    data_path = "C:/Users/God/data/stock_data/aapl_5y.csv"
 
     df = pd.read_csv(data_path)
     df = format_df_for_graph(df)
 
-    for i in range(0, int(len(df) - int(len(df)/10)), int(len(df)/10)):
-        temp_df = df.iloc[i:i+int(len(df)/10)]
-        print(f"i: {i}, i+mod: {i+int(len(df)/10)}")
-        print(f"len: {len(temp_df)}")
-        x = np.array(temp_df['index'].tolist())
-        y = np.array(temp_df['price'].tolist())
+    dfs = np.array_split(df, 10)
+
+    for df in dfs:
+        x = [i for i in range(len(df))]
+        y = np.array(df['price'].tolist())
+
+        save_name = f"{y[-1]}_{y[-2]}_aapl.png"
+        x = x[:-1]
+        y = y[:-1]
+
+        plt.xlabel('Day Number')
+        plt.ylabel('Price')
         plt.plot(x, y)
-        plt.savefig(f"aapl_{i}.png")
+        plt.savefig(save_name)
+        plt.clf()
+
+
 
 if __name__ == '__main__':
     main()
