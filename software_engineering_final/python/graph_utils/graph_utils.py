@@ -15,26 +15,31 @@ def format_df_for_graph(df):
 
 def main():
 
-    data_path = "C:/Users/God/data/stock_data/aapl_5y.csv"
+    tickers = ['aapl', 'ba', 'fb', 'goog', 'msft']
 
-    df = pd.read_csv(data_path)
-    df = format_df_for_graph(df)
+    for ticker in tickers:
+        data_path = f"C:/Users/God/data/stock_data/{ticker}_5y.csv"
 
-    dfs = np.array_split(df, 10)
+        df = pd.read_csv(data_path)
+        df = format_df_for_graph(df)
 
-    for df in dfs:
-        x = [i for i in range(len(df))]
-        y = np.array(df['price'].tolist())
+        dfs = np.array_split(df, 10)
 
-        save_name = f"{y[-1]}_{y[-2]}_aapl.png"
-        x = x[:-1]
-        y = y[:-1]
+        for df in dfs:
+            x = [i for i in range(len(df))]
+            y = np.array(df['price'].tolist())
 
-        plt.xlabel('Day Number', fontsize=18)
-        plt.ylabel('Price', fontsize=18)
-        plt.plot(x, y)
-        plt.savefig(save_name)
-        plt.clf()
+            save_name = f"{y[-1]}_{y[-2]}_aapl.png"
+            x = x[:-1]
+            y = y[:-1]
+
+            title = data_path.split('/')[-1].split('.')[0].split('_')[0].upper()
+            plt.title(title, fontsize=18)
+            plt.xlabel('Day Number', fontsize=18)
+            plt.ylabel('Price', fontsize=18)
+            plt.plot(x, y)
+            plt.savefig(save_name)
+            plt.clf()
 
 
 
