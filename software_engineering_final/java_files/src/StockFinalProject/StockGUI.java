@@ -74,6 +74,12 @@ public class StockGUI extends JPanel
 
 	private ArrayList<String> graph_file_paths = new ArrayList<String>();
 
+	public static int randomNum;
+	public static String graph_file_to_be_parsed;
+	public static double current_price;
+	public static double future_price;
+	public static double net;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -215,6 +221,19 @@ public class StockGUI extends JPanel
 		}
 	}
 
+	
+	// Calculates the gain/loss and updates the frames of the GUI
+	public void GameLogic() {
+		graph_file_to_be_parsed = graph_file_paths.get(randomNum);
+		System.out.println("THIS IS THE NAME OF THE FILE" + graph_file_to_be_parsed);
+		// parse file name
+		// change the image and set the new price and ticker
+		// calculate the loss/gain
+		// update the account balance
+		// update the last gained
+	}
+	
+	
 	/**
 	 * Create the frame.
 	 */
@@ -288,7 +307,7 @@ public class StockGUI extends JPanel
 
 		try {
 			// Random number to choose a random file from the list of graphs.
-			int randomNum = ThreadLocalRandom.current().nextInt(0, graph_file_paths.size());
+			randomNum = ThreadLocalRandom.current().nextInt(0, graph_file_paths.size());
 
 			// Loads a graph image from the data directory.
 			BufferedImage stock_graph = ImageIO.read(new File(graph_file_paths.get(randomNum)));
@@ -441,6 +460,12 @@ public class StockGUI extends JPanel
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{	
+				
+				
+				GameLogic(); // KEVIN ADDED THIS
+				
+				
+				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Long this stock");
 				editable_label.setAlignmentX(CENTER_ALIGNMENT);
@@ -495,6 +520,8 @@ public class StockGUI extends JPanel
 					}
 				});
 				t.start();
+				
+				
 			}
 		});
 		
