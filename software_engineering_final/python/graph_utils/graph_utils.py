@@ -30,8 +30,8 @@ def main():
         x = x[:-1]
         y = y[:-1]
 
-        plt.xlabel('Day Number')
-        plt.ylabel('Price')
+        plt.xlabel('Day Number', fontsize=18)
+        plt.ylabel('Price', fontsize=18)
         plt.plot(x, y)
         plt.savefig(save_name)
         plt.clf()
