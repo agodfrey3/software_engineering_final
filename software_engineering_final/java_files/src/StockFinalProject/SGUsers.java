@@ -1,8 +1,13 @@
 package StockFinalProject;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class SGUsers {
+public class SGUsers implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String username;
 	private Integer turnCounter = 0;
 	private Double balance = 0.0;
