@@ -31,6 +31,14 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.text.DecimalFormat;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 public class StockGUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
@@ -284,8 +292,19 @@ public class StockGUI extends JPanel
 
 			// Loads a graph image from the data directory.
 			BufferedImage stock_graph = ImageIO.read(new File(graph_file_paths.get(randomNum)));
+			
+			int type = stock_graph.getType() == 0? BufferedImage.TYPE_INT_ARGB
+                    : stock_graph.getType();
+			
+			//BufferedImage resized_image = resizeImage(stock_graph, type, 200, 200);
+			BufferedImage resizedImage = new BufferedImage(400, 400, type);
+			Graphics2D g = resizedImage.createGraphics();
+			g.drawImage(stock_graph, 0, 0, 400, 400, null);
+			g.dispose();
+			
 			// Adds the image to a JLabel and then adds it to the JPanel.
-			JLabel stock_graph_label = new JLabel(new ImageIcon(stock_graph));
+		//	JLabel stock_graph_label = new JLabel(new ImageIcon(stock_graph));
+			JLabel stock_graph_label = new JLabel(new ImageIcon(resizedImage));
 			stockgraph_panel.add(stock_graph_label);
 		}
 		catch (IOException e){

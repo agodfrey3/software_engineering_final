@@ -18,7 +18,7 @@ public class SocketServer implements Runnable
 	   String ipString;
 	   char threadType;
 
-	   //static Vector<String> vec = new Vector<String>(5);
+	   static Vector<String> vec = new Vector<String>(5);
 	   
 	   static Vector<SGUsers> users_playing = new Vector<SGUsers>();
 	   
