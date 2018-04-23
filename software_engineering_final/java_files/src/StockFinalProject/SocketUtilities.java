@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -16,7 +18,7 @@ public class SocketUtilities
 	Socket clientSocket=null;
     DataOutputStream outToServer=null;
     BufferedReader inFromServer=null;
-    StringBuilder client_username = new StringBuilder("");
+    //StringBuilder client_username = new StringBuilder("");
 
 	public boolean socketConnect()
 	{
@@ -67,44 +69,71 @@ public class SocketUtilities
 		return rc;
 	}
 	
-	public boolean sendMessage(Vector<String> msg)
+//	public String getKey() {
+//		
+//		String user_key = "\0";
+//		
+//		try {
+//			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
+//			ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
+//			user_key = (String) in_os.readObject();
+//		}
+//		catch (Exception e)
+//		{
+//			// TODO Auto-generated catch block
+//			System.out.println("somethings wrong with getkey");
+//			e.printStackTrace();
+//		}
+//		
+//		return user_key;
+//	}
+	
+	public boolean sendUserKO(SGUserKO userKO)
 	{
 		boolean rc=false;
 		
 		try 
 		{
-			StringBuilder clientdata_strb = new StringBuilder();
-			clientdata_strb.append(client_username.toString());
-			clientdata_strb.append(" ==> ");
+			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
+			ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
+			out_os.writeObject(userKO);
 			
-			for(int i=0; i<msg.size(); i++) {
-				clientdata_strb.append(msg.get(i));
-				clientdata_strb.append(" | ");
-			}
-			
-			String clientdata_fullstr = clientdata_strb.toString();
+//			StringBuilder clientdata_strb = new StringBuilder();
+//			clientdata_strb.append(client_username.toString());
+//			clientdata_strb.append(" ==> ");
+//			
+//			for(int i=0; i<msg.size(); i++) {
+//				clientdata_strb.append(msg.get(i));
+//				clientdata_strb.append(" | ");
+//			}
+//			
+//			String clientdata_fullstr = clientdata_strb.toString();
 			
 			// StringBuilder works
 			// Can also access array element as long as index is specified
-			outToServer.writeBytes(clientdata_fullstr + "\r\n");
+			//outToServer.writeBytes(clientdata_fullstr + "\r\n");
 			rc = true;
 		}
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
+			System.out.println("somethings wrong with sendmessage");
 			e.printStackTrace();
 		}
 		
 		return rc;
 	}
 	
-//	public boolean sendCountData(Integer msg)
+//	public boolean incrementLS(String userKey)
 //	{
 //		boolean rc=false;
 //		
 //		try 
 //		{
-//			outToServer.writeBytes("DataEntry>" + msg + "\r\n");
+//			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
+//			//ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
+//			out_os.writeObject(userKey);
+//			
 //			rc = true;
 //		}
 //		catch (IOException e)

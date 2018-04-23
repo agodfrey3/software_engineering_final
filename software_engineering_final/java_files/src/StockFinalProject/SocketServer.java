@@ -9,8 +9,12 @@ import java.net.SocketException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Random;
 import java.util.Vector;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class SocketServer implements Runnable
 {
@@ -19,9 +23,8 @@ public class SocketServer implements Runnable
 	   char threadType;
 
 	   static Vector<String> vec = new Vector<String>(5);
-	   
-	   static Vector<SGUsers> users_playing = new Vector<SGUsers>();
-	   
+	   static Hashtable<String, SGUsers> usersplaying_hash = new Hashtable<String, SGUsers>();
+
 	   static final String newline = "\n";
 	   static int first_time = 1;
 	   
@@ -104,7 +107,7 @@ public class SocketServer implements Runnable
 		    e.printStackTrace();
 	     }
 	}	  
-
+	   
 	// This is the thread code that ALL clients will run()
 	public void run()
 	{
@@ -113,6 +116,7 @@ public class SocketServer implements Runnable
 		  boolean session_done = false; 
 	      long threadId;
 	      String clientString;
+	      //String numTurns;
 	      String keyString = "";
 	    
 	      threadId = Thread.currentThread().getId();
@@ -147,18 +151,25 @@ public class SocketServer implements Runnable
 	        }
 	      
 	      BufferedReader rstream = new BufferedReader(new InputStreamReader(csocket.getInputStream()));
-	       
+	      ObjectOutputStream out_os = new ObjectOutputStream(csocket.getOutputStream());
+	      ObjectInputStream in_os = new ObjectInputStream(csocket.getInputStream());
+	      
 	      while (session_done == false)
 	      {
 	       	if (rstream.ready())   // check for any data messages
 	       	{
-	       		//ObjectInputStream ois = new ObjectInputStream(csocket.getInputStream());
-	            //String tempString = ois.readObject();
-	            //String unravel = clientString.toString();
-	              clientString = rstream.readLine();
+	       		  SGUserKO userKO = (SGUserKO) in_os.readObject();
+	       		  
+	       		  usersplaying_hash.put(userKO.getUserKey(), userKO.getUserObj());
+	  	   	       		  
+	              clientString = usersplaying_hash.get(userKO.getUserKey()).getUserName();
+	              
+	              //usersplaying_hash.get(testkey).addToTurnCounter();
+	              //numTurns = Integer.toString(usersplaying_hash.get(testkey).getTurnCounter());
+	              
 	              
 	              // update the status text area to show progress of program
-	   	           SocketServerGUI.textArea.append("User: " + clientString + newline);
+	   	           SocketServerGUI.textArea.append("User: " + clientString /*+ numTurns*/ + newline);
 	     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	     	       SocketServerGUI.textArea.repaint();
 	     	       // update the status text area to show progress of program
@@ -166,7 +177,9 @@ public class SocketServer implements Runnable
 	     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	     	       SocketServerGUI.textArea.repaint();
 	              
-	              if (clientString.length() > 128)
+	     	      //out_os.writeObject(user_key);
+	              
+	     	      if (clientString.length() > 128)
 	              {
 	           	   session_done = true;
 	           	   continue;

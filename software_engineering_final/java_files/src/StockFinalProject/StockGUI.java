@@ -12,6 +12,7 @@ import javax.swing.text.DefaultCaret;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 import java.util.Vector;
 import java.io.File;
 import java.awt.BorderLayout;
@@ -47,15 +48,7 @@ public class StockGUI extends JPanel
 	private JPanel contentPane;
 	
 	private static SGUsers newuser_obj = new SGUsers();
-	//private static String username_user;
-	// Tracks user's number of turns played
-	//private static Integer turnCounter;
-	// Tracks user's set of longed stocks ==> stores actual stock symbols
-	// Index of stock symbols start at 1
-	//private Vector<String> stockslonged_vector = new Vector<String>();
-	// Tracks user's set of shorted stocks ==> stores actual stock symbols
-	// Index of stock symbols start at 1
-	//private Vector<String> stocksshorted_vector = new Vector<String>();
+	private static String user_key;
 	private JButton long_button;
 	private JButton short_button;
 	private JButton leaderboard_button;
@@ -93,7 +86,7 @@ public class StockGUI extends JPanel
 				 while (true)
 				 {	 			      
 					   Date date = new Date();
-					   String str = String.format("       %tc", date);
+					   String str = String.format("     %tc", date);
 					 
 				   clock_textarea.setText("");
 				   clock_textarea.append(str);
@@ -118,6 +111,17 @@ public class StockGUI extends JPanel
 	public static void main(String[] args)
 	{
 		createStartingFrame();
+	}
+
+	public static String createUserKey(SGUsers user_obj) {
+		   //String user_key = String.format("|%020d|", user_obj.getUserName());
+		   Random rand = new Random();
+		   int  m = rand.nextInt(100) + 1;
+		   int n = rand.nextInt(100) + 1;
+		   
+		   String user_key = Integer.toString(m) + user_obj.getUserName() + Integer.toString(n);
+		   
+		   return user_key;
 	}
 	
 	// Function creates frame/window that asks for user's desired username
@@ -178,29 +182,30 @@ public class StockGUI extends JPanel
 				app_frame.setLocationRelativeTo(null);
 				app_frame.setSize(new Dimension(1225, 715));
 				newuser_obj.setUserName(username_textfield.getText());
-//				Thread t = new Thread(new Runnable()
-//				{
-//					public void run()
-//					{
-//						SocketUtilities su = new SocketUtilities();
-//						if (su.socketConnect() == true)
-//						{
-//							//if(su.client_username.toString().equals(""))
-//							//	su.client_username.append(username_user);
-//
-//							//su.sendMessage(stockslonged_vector);
-//							su.closeSocket();
-//						}
-//						else
-//						{
-//							JOptionPane.showMessageDialog(null,
-//									"ERROR: Connection to Socket Server is Down!",
-//									"Client",
-//									JOptionPane.WARNING_MESSAGE);
-//						}
-//					}
-//				});
-//				t.start();
+				Thread t = new Thread(new Runnable()
+				{
+					public void run()
+					{
+						SocketUtilities su = new SocketUtilities();
+						if (su.socketConnect() == true)
+						{
+							user_key = createUserKey(newuser_obj);
+							SGUserKO userKO = new SGUserKO(user_key,newuser_obj);
+							su.sendUserKO(userKO);
+							
+					        //System.out.println("returned key is = " + user_key);
+							su.closeSocket();
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null,
+									"ERROR: Connection to Socket Server is Down!",
+									"Client",
+									JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				});
+				t.start();
 				app_frame.setTitle("Stock Market Game: Welcome " + newuser_obj.getUserName() + "!");
 				app_frame.setVisible(true);
 			}	
@@ -260,7 +265,7 @@ public class StockGUI extends JPanel
 		JPanel balanceleaderboard_panel = new JPanel();
 		// Organizes components from top to bottom, starting with the first added component
 		balanceleaderboard_panel.setLayout(new BoxLayout(balanceleaderboard_panel, BoxLayout.Y_AXIS));
-		balanceleaderboard_panel.setPreferredSize(new Dimension(300,675));
+		balanceleaderboard_panel.setPreferredSize(new Dimension(275,675));
 		balanceleaderboard_panel.add(Box.createRigidArea(new Dimension(0,40)));
 		balanceleaderboard_panel.setBackground(new Color(196, 236, 237));
 		balanceleaderboard_panel.setBorder(BorderFactory.createLineBorder(new Color(127, 194, 198),5));
@@ -294,7 +299,7 @@ public class StockGUI extends JPanel
 		// playbuttons_panel
 		JPanel tickerplaybuttons_panel = new JPanel();
 		tickerplaybuttons_panel.setLayout(new BoxLayout(tickerplaybuttons_panel, BoxLayout.Y_AXIS));
-		tickerplaybuttons_panel.setPreferredSize(new Dimension(600,675));
+		tickerplaybuttons_panel.setPreferredSize(new Dimension(650,675));
 		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0,15))); //Pushes the ticker label to a lower position
 		tickerplaybuttons_panel.setBackground(new Color(196, 236, 237));
 		tickerplaybuttons_panel.setBorder(BorderFactory.createLineBorder(new Color(127, 194, 198),5));
@@ -344,7 +349,7 @@ public class StockGUI extends JPanel
 		//Panel that houses right side of gui
 		JPanel right_panel = new JPanel();
 		right_panel.setLayout(new BoxLayout(right_panel, BoxLayout.Y_AXIS));
-		right_panel.setPreferredSize(new Dimension(300, 675));
+		right_panel.setPreferredSize(new Dimension(275, 675));
 		right_panel.setBackground(new Color(196, 236, 237));
 		right_panel.setBorder(BorderFactory.createLineBorder(new Color(127, 194, 198),5));
 		
@@ -488,13 +493,7 @@ public class StockGUI extends JPanel
 						SocketUtilities su = new SocketUtilities();
 						if (su.socketConnect() == true)
 						{	
-							//Sending a simple string works
-							// Sending an element of an array works
-							//su.sendMessage(stockslonged_vector);
-							//su.sendCountData(turnCounter);
-							
-//							String recvMsgStr = su.recvMessage();
-//							su.sendMessage("QUIT>");
+							//su.incrementLS(user_key);
 							
 //							ObjectOutputStream outputStream;
 //							try {
@@ -508,7 +507,7 @@ public class StockGUI extends JPanel
 //								e.printStackTrace();
 //							}
 							
-							su.closeSocket();
+							//su.closeSocket();
 						}
 						else
 						{
