@@ -296,14 +296,12 @@ public class StockGUI extends JPanel
 			int type = stock_graph.getType() == 0? BufferedImage.TYPE_INT_ARGB
                     : stock_graph.getType();
 			
-			//BufferedImage resized_image = resizeImage(stock_graph, type, 200, 200);
-			BufferedImage resizedImage = new BufferedImage(400, 400, type);
+			BufferedImage resizedImage = new BufferedImage(590, 490, type);
 			Graphics2D g = resizedImage.createGraphics();
-			g.drawImage(stock_graph, 0, 0, 400, 400, null);
+			g.drawImage(stock_graph, 0, 0, 590, 490, null);
 			g.dispose();
 			
 			// Adds the image to a JLabel and then adds it to the JPanel.
-		//	JLabel stock_graph_label = new JLabel(new ImageIcon(stock_graph));
 			JLabel stock_graph_label = new JLabel(new ImageIcon(resizedImage));
 			stockgraph_panel.add(stock_graph_label);
 		}
