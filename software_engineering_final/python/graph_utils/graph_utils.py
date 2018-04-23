@@ -29,11 +29,11 @@ def main():
             x = [i for i in range(len(df))]
             y = np.array(df['price'].tolist())
 
-            save_name = f"{y[-1]}_{y[-2]}_aapl.png"
+            save_name = f"{y[-1]}_{y[-2]}_{ticker}.png"
             x = x[:-1]
             y = y[:-1]
 
-            title = data_path.split('/')[-1].split('.')[0].split('_')[0].upper()
+            title = ticker.upper()
             plt.title(title, fontsize=18)
             plt.xlabel('Day Number', fontsize=18)
             plt.ylabel('Price', fontsize=18)
