@@ -24,8 +24,7 @@ public class SocketServer implements Runnable
 
 	   static Vector<String> vec = new Vector<String>(5);
 	   static Hashtable<String, SGUsers> usersplaying_hash = new Hashtable<String, SGUsers>();
-	   //static Vector<SGUsers> usersplaying_vec = new Vector<SGUsers>();
-	   
+
 	   static final String newline = "\n";
 	   static int first_time = 1;
 	   
