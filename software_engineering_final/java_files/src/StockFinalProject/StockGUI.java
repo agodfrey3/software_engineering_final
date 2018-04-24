@@ -30,15 +30,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.text.DecimalFormat;
-
-import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class StockGUI extends JPanel
 {
@@ -67,11 +59,18 @@ public class StockGUI extends JPanel
 
 	private ArrayList<String> graph_file_paths = new ArrayList<String>();
 
+	public static int player_count = 1;
+	public static double account_balance = 100000.00;
+	
 	public static int randomNum;
 	public static String graph_file_to_be_parsed;
 	public static double current_price;
 	public static double future_price;
 	public static double net;
+	public static String ticker;
+	public static double last_gained = 0.0;
+	
+	public static final double leverage = 10000.00; // How many shares of each stock you transact with
 	
 	/**
 	 * Launch the application.
@@ -125,7 +124,7 @@ public class StockGUI extends JPanel
 	}
 	
 	// Function creates frame/window that asks for user's desired username
-	// before transitioning to stock market game
+	// before transitioning to the stock market game
 	public static void createStartingFrame() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -227,17 +226,43 @@ public class StockGUI extends JPanel
 	}
 
 	
-	// Calculates the gain/loss and updates the frames of the GUI
-	public void GameLogic() {
+	// Calculates the gain/loss from longing a stock and updates the frames of the GUI
+	public void GameLogicLong() {
 		graph_file_to_be_parsed = graph_file_paths.get(randomNum);
-		System.out.println("THIS IS THE NAME OF THE FILE" + graph_file_to_be_parsed);
+		String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);
+		
 		// parse file name
-		// change the image and set the new price and ticker
+		current_price = Double.parseDouble(cleaned_file_name.split("_")[0]);
+		future_price = Double.parseDouble(cleaned_file_name.split("_")[1]);
+		
 		// calculate the loss/gain
-		// update the account balance
-		// update the last gained
+		net = leverage * (future_price - current_price);
+		ticker = cleaned_file_name.split("_")[2];
+		
+		account_balance += net;
+		last_gained = net;
+		
+		// change the image and set the new price and ticker
 	}
 	
+	// Calculates the gain/loss from shorting a stock and updates the frames of the GUI
+	public void GameLogicShort() {
+		graph_file_to_be_parsed = graph_file_paths.get(randomNum);
+		String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);
+		
+		// parse file name
+		current_price = Double.parseDouble(cleaned_file_name.split("_")[0]);
+		future_price = Double.parseDouble(cleaned_file_name.split("_")[1]);
+		
+		// calculate the loss/gain
+		net = -1 * leverage * (future_price - current_price);
+		ticker = cleaned_file_name.split("_")[2];
+		
+		account_balance += net;
+		last_gained = net;
+		
+		// change the image and set the new price and ticker
+	}
 	
 	/**
 	 * Create the frame.
@@ -346,7 +371,7 @@ public class StockGUI extends JPanel
 		playercount_panel.setBackground(new Color(196, 236, 237));
 		playercount_panel.setBorder(BorderFactory.createMatteBorder(5, 0, 5, 0, new Color(127, 194, 198)));
 		
-		//Panel that houses right side of gui
+		//Panel that houses right side of GUI
 		JPanel right_panel = new JPanel();
 		right_panel.setLayout(new BoxLayout(right_panel, BoxLayout.Y_AXIS));
 		right_panel.setPreferredSize(new Dimension(275, 675));
@@ -368,7 +393,9 @@ public class StockGUI extends JPanel
 		balanceleaderboard_panel.add(account_title_label);
 		
 		// Account Balance Label
-		account_label = new JLabel(Double.toString(newuser_obj.getBalance()), SwingConstants.CENTER);
+//		account_label = new JLabel(Double.toString(newuser_obj.getBalance()), SwingConstants.CENTER);
+		account_label = new JLabel("$" + String.format("%.2f", account_balance), SwingConstants.CENTER);
+
 		account_label.setFont(new Font(account_label.getFont().getName(), account_label.getFont().getStyle(), 15));
 		account_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		balanceleaderboard_panel.add(account_label);
@@ -380,9 +407,9 @@ public class StockGUI extends JPanel
 		lastgained_label.setFont(new Font(lastgained_label.getFont().getName(), lastgained_label.getFont().getStyle(), 15));
 		lastgained_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		pointsgained_label = new JLabel("+0", SwingConstants.CENTER);
+		pointsgained_label = new JLabel("$0", SwingConstants.CENTER);
 		pointsgained_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		pointsgained_label.setFont(new Font(pointsgained_label.getFont().getName(), pointsgained_label.getFont().getStyle(), 50));
+		pointsgained_label.setFont(new Font(pointsgained_label.getFont().getName(), pointsgained_label.getFont().getStyle(), 20));
 		pointsgained_label.setPreferredSize(new Dimension(125, 100));
 		
 		pointsgained_panel.add(lastgained_label);
@@ -396,12 +423,17 @@ public class StockGUI extends JPanel
 		ticker_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		tickerplaybuttons_panel.add(ticker_label);
 
+		GameLogicLong();
+		ticker_label.setText(ticker.toUpperCase());
+		
 		// Price Label
 		price_label = new JLabel("0.00", SwingConstants.CENTER);
 		price_label.setFont(new Font(price_label.getFont().getName(), price_label.getFont().getStyle(), 25));
 		price_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		tickerplaybuttons_panel.add(price_label);
 
+		price_label.setText(String.format("%.2f", current_price));
+		
 		// Turn Count Title Label
 		turn_title_label = new JLabel("Turn Count", SwingConstants.CENTER);
 		turn_title_label.setFont(new Font(turn_title_label.getFont().getName(), turn_title_label.getFont().getStyle(), 15));
@@ -422,7 +454,7 @@ public class StockGUI extends JPanel
 		playercount_panel.add(playertext_label);
 
 		// Number of players currently playing Label
-		playercount_label = new JLabel("0", SwingConstants.CENTER);
+		playercount_label = new JLabel(Integer.toString(player_count), SwingConstants.CENTER);
 		playercount_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		playercount_panel.add(playercount_label);
 		right_panel.add(clock_textarea);
@@ -465,11 +497,12 @@ public class StockGUI extends JPanel
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{	
-				
-				
-				GameLogic(); // KEVIN ADDED THIS
-				
-				
+				// Game Logic
+				GameLogicLong();
+				price_label.setText(String.valueOf(current_price));
+				ticker_label.setText(ticker.toUpperCase());
+				account_label.setText("$" + String.format("%.2f", account_balance));
+				pointsgained_label.setText("$" + String.format("%.2f", net));
 				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Long this stock");
@@ -477,7 +510,7 @@ public class StockGUI extends JPanel
 				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
 				editable_label.setForeground(new Color(35, 142, 57));
 
-				transhistorydisplay_panel.add(editable_label, 0);//, gbc);
+				transhistorydisplay_panel.add(editable_label, 0);
 				transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
 				transhistorydisplay_panel.validate();
 				transhistorydisplay_panel.repaint();
@@ -527,13 +560,20 @@ public class StockGUI extends JPanel
 		short_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				// Game Logic
+				GameLogicShort();
+				price_label.setText(String.format("%.2f", current_price));
+				ticker_label.setText(ticker.toUpperCase());
+				account_label.setText("$" + String.format("%.2f", account_balance));
+				pointsgained_label.setText("$" + String.format("%.2f", net));
+				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Short this stock");
 				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
 				editable_label.setForeground(Color.red);
 				editable_label.setAlignmentX(CENTER_ALIGNMENT);
 
-				transhistorydisplay_panel.add(editable_label,0);//, gbc);
+				transhistorydisplay_panel.add(editable_label,0);
 				transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
 				transhistorydisplay_panel.validate();
 				transhistorydisplay_panel.repaint();
