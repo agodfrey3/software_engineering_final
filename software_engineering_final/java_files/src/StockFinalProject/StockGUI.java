@@ -70,7 +70,7 @@ public class StockGUI extends JPanel
 	public static String ticker;
 	public static double last_gained = 0.0;
 	
-	public static final double leverage = 10000.00; // How many shares of each stock you transact with
+	public static final double leverage = 5000.00; // How many shares of each stock you transact with
 	
 	/**
 	 * Launch the application.
