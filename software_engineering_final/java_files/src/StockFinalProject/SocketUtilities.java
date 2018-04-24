@@ -1,13 +1,13 @@
 package StockFinalProject;
 
-import java.util.Vector;
+//import java.util.Vector;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
+//import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -95,7 +95,7 @@ public class SocketUtilities
 		try 
 		{
 			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
-			ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
+//			ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
 			out_os.writeObject(userKO);
 			
 //			StringBuilder clientdata_strb = new StringBuilder();

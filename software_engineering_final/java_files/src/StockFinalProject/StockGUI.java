@@ -7,29 +7,29 @@ package StockFinalProject;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
+//import javax.swing.text.BadLocationException;
+//import javax.swing.text.DefaultCaret;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
-import java.util.Vector;
+//import java.util.Vector;
 import java.io.File;
-import java.awt.BorderLayout;
+//import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+//import java.awt.GridBagConstraints;
+//import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+//import java.io.ObjectOutputStream;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 import java.awt.Graphics2D;
 
 public class StockGUI extends JPanel
@@ -44,7 +44,7 @@ public class StockGUI extends JPanel
 	private JButton long_button;
 	private JButton short_button;
 	private JButton leaderboard_button;
-	private JButton transaction_button;
+//	private JButton transaction_button;
 	private JLabel account_title_label;
 	private JLabel account_label;
 	private JLabel lastgained_label;
@@ -234,13 +234,17 @@ public class StockGUI extends JPanel
 		// parse file name
 		current_price = Double.parseDouble(cleaned_file_name.split("_")[0]);
 		future_price = Double.parseDouble(cleaned_file_name.split("_")[1]);
+		ticker = cleaned_file_name.split("_")[2];
 		
 		// calculate the loss/gain
 		net = leverage * (future_price - current_price);
-		ticker = cleaned_file_name.split("_")[2];
 		
 		account_balance += net;
 		last_gained = net;
+		
+		if (account_balance <= 0) {
+			// Throw a Game Over Screen
+		}
 		
 		// change the image and set the new price and ticker
 	}
@@ -253,13 +257,19 @@ public class StockGUI extends JPanel
 		// parse file name
 		current_price = Double.parseDouble(cleaned_file_name.split("_")[0]);
 		future_price = Double.parseDouble(cleaned_file_name.split("_")[1]);
+		ticker = cleaned_file_name.split("_")[2];
 		
 		// calculate the loss/gain
 		net = -1 * leverage * (future_price - current_price);
-		ticker = cleaned_file_name.split("_")[2];
 		
 		account_balance += net;
 		last_gained = net;
+		
+		if (account_balance <= 0) {
+			// Throw a Game Over Screen
+		}
+		
+		// Adds the image to a JLabel and then adds it to the JPanel.
 		
 		// change the image and set the new price and ticker
 	}
@@ -334,7 +344,7 @@ public class StockGUI extends JPanel
 		// Width dimension doesn't matter when using a flowlayout
 		stockgraph_panel.setBackground(new Color(127, 194, 198));
 		stockgraph_panel.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, new Color(127, 194, 198)));
-
+		
 		try {
 			// Random number to choose a random file from the list of graphs.
 			randomNum = ThreadLocalRandom.current().nextInt(0, graph_file_paths.size());
@@ -499,10 +509,41 @@ public class StockGUI extends JPanel
 			{	
 				// Game Logic
 				GameLogicLong();
-				price_label.setText(String.valueOf(current_price));
-				ticker_label.setText(ticker.toUpperCase());
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
+				
+				try {
+					stockgraph_panel.removeAll();
+					
+					// Random number to choose a random file from the list of graphs.
+					randomNum = ThreadLocalRandom.current().nextInt(0, graph_file_paths.size());
+	
+					// Loads a graph image from the data directory.
+					BufferedImage stock_graph = ImageIO.read(new File(graph_file_paths.get(randomNum)));
+							
+					int type = stock_graph.getType() == 0? BufferedImage.TYPE_INT_ARGB : stock_graph.getType();
+							
+					BufferedImage resizedImage = new BufferedImage(590, 490, type);
+					Graphics2D g = resizedImage.createGraphics();
+					g.drawImage(stock_graph, 0, 0, 590, 490, null);
+					g.dispose();
+							
+					// Adds the image to a JLabel and then adds it to the JPanel.
+					JLabel stock_graph_label = new JLabel(new ImageIcon(resizedImage));
+					stockgraph_panel.add(stock_graph_label);
+				}
+				catch (IOException i){
+					// In case of file not found error. Could potentially handle this more gracefully.
+					i.printStackTrace();
+				}
+				
+				graph_file_to_be_parsed = graph_file_paths.get(randomNum);
+				String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);
+				current_price = Double.parseDouble(cleaned_file_name.split("_")[0]);
+				ticker = cleaned_file_name.split("_")[2];
+				
+				price_label.setText(String.format("%.2f", current_price));
+				ticker_label.setText(ticker.toUpperCase());
 				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Long this stock");
@@ -562,10 +603,41 @@ public class StockGUI extends JPanel
 			{
 				// Game Logic
 				GameLogicShort();
-				price_label.setText(String.format("%.2f", current_price));
-				ticker_label.setText(ticker.toUpperCase());
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
+				
+				try {
+					stockgraph_panel.removeAll();
+					
+					// Random number to choose a random file from the list of graphs.
+					randomNum = ThreadLocalRandom.current().nextInt(0, graph_file_paths.size());
+	
+					// Loads a graph image from the data directory.
+					BufferedImage stock_graph = ImageIO.read(new File(graph_file_paths.get(randomNum)));
+							
+					int type = stock_graph.getType() == 0? BufferedImage.TYPE_INT_ARGB : stock_graph.getType();
+							
+					BufferedImage resizedImage = new BufferedImage(590, 490, type);
+					Graphics2D g = resizedImage.createGraphics();
+					g.drawImage(stock_graph, 0, 0, 590, 490, null);
+					g.dispose();
+							
+					// Adds the image to a JLabel and then adds it to the JPanel.
+					JLabel stock_graph_label = new JLabel(new ImageIcon(resizedImage));
+					stockgraph_panel.add(stock_graph_label);
+				}
+				catch (IOException i){
+					// In case of file not found error. Could potentially handle this more gracefully.
+					i.printStackTrace();
+				}
+				
+				graph_file_to_be_parsed = graph_file_paths.get(randomNum);
+				String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);
+				current_price = Double.parseDouble(cleaned_file_name.split("_")[0]);
+				ticker = cleaned_file_name.split("_")[2];
+				
+				price_label.setText(String.format("%.2f", current_price));
+				ticker_label.setText(ticker.toUpperCase());
 				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Short this stock");

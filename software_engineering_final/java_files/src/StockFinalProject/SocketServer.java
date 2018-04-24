@@ -10,11 +10,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Random;
+//import java.util.Random;
 import java.util.Vector;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+//import java.io.ObjectOutputStream;
 
 public class SocketServer implements Runnable
 {
@@ -151,7 +151,7 @@ public class SocketServer implements Runnable
 	        }
 	      
 	      BufferedReader rstream = new BufferedReader(new InputStreamReader(csocket.getInputStream()));
-	      ObjectOutputStream out_os = new ObjectOutputStream(csocket.getOutputStream());
+//	      ObjectOutputStream out_os = new ObjectOutputStream(csocket.getOutputStream());
 	      ObjectInputStream in_os = new ObjectInputStream(csocket.getInputStream());
 	      
 	      while (session_done == false)
