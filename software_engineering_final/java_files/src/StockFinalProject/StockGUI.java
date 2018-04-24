@@ -241,12 +241,6 @@ public class StockGUI extends JPanel
 		
 		account_balance += net;
 		last_gained = net;
-		
-		if (account_balance <= 0) {
-			// Throw a Game Over Screen
-		}
-		
-		// change the image and set the new price and ticker
 	}
 	
 	// Calculates the gain/loss from shorting a stock and updates the frames of the GUI
@@ -264,14 +258,6 @@ public class StockGUI extends JPanel
 		
 		account_balance += net;
 		last_gained = net;
-		
-		if (account_balance <= 0) {
-			// Throw a Game Over Screen
-		}
-		
-		// Adds the image to a JLabel and then adds it to the JPanel.
-		
-		// change the image and set the new price and ticker
 	}
 	
 	/**
@@ -511,7 +497,7 @@ public class StockGUI extends JPanel
 				GameLogicLong();
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
-				
+								
 				try {
 					stockgraph_panel.removeAll();
 					
@@ -544,6 +530,10 @@ public class StockGUI extends JPanel
 				
 				price_label.setText(String.format("%.2f", current_price));
 				ticker_label.setText(ticker.toUpperCase());
+				
+				if (account_balance <= 0) {
+					JOptionPane.showMessageDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turns.", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
+				}
 				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Long this stock");
@@ -638,6 +628,10 @@ public class StockGUI extends JPanel
 				
 				price_label.setText(String.format("%.2f", current_price));
 				ticker_label.setText(ticker.toUpperCase());
+				
+				if (account_balance <= 0) {
+					JOptionPane.showMessageDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turns.", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
+				}
 				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Short this stock");
