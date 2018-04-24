@@ -198,8 +198,8 @@ public class StockGUI extends JPanel
 						else
 						{
 							JOptionPane.showMessageDialog(null,
-									"ERROR: Connection to Socket Server is Down!",
-									"Client",
+									"ERROR: Connection to Socket Server is down!",
+									"Socket Server Error",
 									JOptionPane.WARNING_MESSAGE);
 						}
 					}
