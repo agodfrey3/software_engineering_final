@@ -70,7 +70,7 @@ public class StockGUI extends JPanel
 	public static String ticker;
 	public static double last_gained = 0.0;
 	
-	public static final double leverage = 5000.00; // How many shares of each stock you transact with
+	public static final double leverage = 5000.0; // How many shares of each stock you transact with
 	
 	/**
 	 * Launch the application.
@@ -258,6 +258,17 @@ public class StockGUI extends JPanel
 		
 		account_balance += net;
 		last_gained = net;
+	}
+	
+	public void ResetGame() {
+		account_balance = 100000.00;
+		net = 0.0;
+		newuser_obj.setTurnCounter(0);
+		account_label.setText("$" + String.format("%.2f", account_balance));
+		pointsgained_label.setText("$" + String.format("%.2f", net));
+		turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
+		
+		// CHANGE THE IMAGE!
 	}
 	
 	/**
@@ -493,6 +504,8 @@ public class StockGUI extends JPanel
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{	
+				newuser_obj.addToTurnCounter();
+				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
 				GameLogicLong();
 				account_label.setText("$" + String.format("%.2f", account_balance));
@@ -532,65 +545,71 @@ public class StockGUI extends JPanel
 				ticker_label.setText(ticker.toUpperCase());
 				
 				if (account_balance <= 0) {
-					JOptionPane.showMessageDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turns.", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
+					if (JOptionPane.showConfirmDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turn(s).\n\nPlay Again?", "Game Over!",
+					        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					    ResetGame();
+					    transhistorydisplay_panel.removeAll();
+					} else {
+					    System.exit(0);
+					}
 				}
 				
-				JLabel editable_label = new JLabel();
-				editable_label.setText("Long this stock");
-				editable_label.setAlignmentX(CENTER_ALIGNMENT);
-				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
-				editable_label.setForeground(new Color(35, 142, 57));
+				else {
+					JLabel editable_label = new JLabel();
+					editable_label.setText("Long " + ticker.toUpperCase());
+					editable_label.setAlignmentX(CENTER_ALIGNMENT);
+					editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+					editable_label.setForeground(new Color(35, 142, 57));
 
-				transhistorydisplay_panel.add(editable_label, 0);
-				transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
-				transhistorydisplay_panel.validate();
-				transhistorydisplay_panel.repaint();
-				
-				newuser_obj.addToStocksLonged("New Stock");
-				newuser_obj.addToTurnCounter();
-				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
-				
-				Thread t = new Thread(new Runnable()
-				{
-					public void run()
+					transhistorydisplay_panel.add(editable_label, 0);
+					transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
+					transhistorydisplay_panel.validate();
+					transhistorydisplay_panel.repaint();
+
+					newuser_obj.addToStocksLonged("New Stock");
+
+					Thread t = new Thread(new Runnable()
 					{
-						SocketUtilities su = new SocketUtilities();
-						if (su.socketConnect() == true)
-						{	
-							//su.incrementLS(user_key);
-							
-//							ObjectOutputStream outputStream;
-//							try {
-//								outputStream = new ObjectOutputStream(su.clientSocket.getOutputStream());
-//								String[] names = new String[1]; // Empty at the moment
-//								names[0] = "Fart";
-//								String temp = "fart";
-//								outputStream.writeObject(temp);
-//							} catch (IOException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-							
-							//su.closeSocket();
-						}
-						else
+						public void run()
 						{
-							JOptionPane.showMessageDialog(null,
-									"ERROR: Connection to Socket Server is Down!",
-									"Client",
-									JOptionPane.WARNING_MESSAGE);
+							SocketUtilities su = new SocketUtilities();
+							if (su.socketConnect() == true)
+							{	
+								//su.incrementLS(user_key);
+
+								//							ObjectOutputStream outputStream;
+								//							try {
+								//								outputStream = new ObjectOutputStream(su.clientSocket.getOutputStream());
+								//								String[] names = new String[1]; // Empty at the moment
+								//								names[0] = "Fart";
+								//								String temp = "fart";
+								//								outputStream.writeObject(temp);
+								//							} catch (IOException e) {
+								//								// TODO Auto-generated catch block
+								//								e.printStackTrace();
+								//							}
+
+								//su.closeSocket();
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(null,
+										"ERROR: Connection to Socket Server is Down!",
+										"Client",
+										JOptionPane.WARNING_MESSAGE);
+							}
 						}
-					}
-				});
-				t.start();
-				
-				
+					});
+					t.start();
+				}
 			}
 		});
 		
 		short_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				newuser_obj.addToTurnCounter();
+				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
 				GameLogicShort();
 				account_label.setText("$" + String.format("%.2f", account_balance));
@@ -630,53 +649,59 @@ public class StockGUI extends JPanel
 				ticker_label.setText(ticker.toUpperCase());
 				
 				if (account_balance <= 0) {
-					JOptionPane.showMessageDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turns.", "Game Over!", JOptionPane.INFORMATION_MESSAGE);
+					if (JOptionPane.showConfirmDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turn(s).\n\nPlay Again?", "Game Over!",
+					        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					    ResetGame();
+					    transhistorydisplay_panel.removeAll();
+					} else {
+					    System.exit(0);
+					}
 				}
 				
-				JLabel editable_label = new JLabel();
-				editable_label.setText("Short this stock");
-				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
-				editable_label.setForeground(Color.red);
-				editable_label.setAlignmentX(CENTER_ALIGNMENT);
+				else {
+					JLabel editable_label = new JLabel();
+					editable_label.setText("Short " + ticker.toUpperCase());
+					editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+					editable_label.setForeground(Color.red);
+					editable_label.setAlignmentX(CENTER_ALIGNMENT);
 
-				transhistorydisplay_panel.add(editable_label,0);
-				transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
-				transhistorydisplay_panel.validate();
-				transhistorydisplay_panel.repaint();
-				
-				newuser_obj.addToStocksShorted("New Stock");
-				newuser_obj.addToTurnCounter();
-				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
-				
-				Thread t = new Thread(new Runnable()
-				{
-					public void run()
+					transhistorydisplay_panel.add(editable_label,0);
+					transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
+					transhistorydisplay_panel.validate();
+					transhistorydisplay_panel.repaint();
+
+					newuser_obj.addToStocksShorted("New Stock");
+
+					Thread t = new Thread(new Runnable()
 					{
-						SocketUtilities su = new SocketUtilities();
-						if (su.socketConnect() == true)
-						{	
-							//su.sendMessage(stocksshorted_vector);
-							
-//							String recvMsgStr = su.recvMessage();
-//							su.sendMessage("QUIT>");
-//
-//							su.closeSocket();
-//
-//							JOptionPane.showMessageDialog(null,
-//									"Message : " + recvMsgStr,
-//									"Client",
-//									JOptionPane.WARNING_MESSAGE);
-						}
-						else
+						public void run()
 						{
-							JOptionPane.showMessageDialog(null,
-									"ERROR: Connection to Socket Server is Down!",
-									"Client",
-									JOptionPane.WARNING_MESSAGE);
+							SocketUtilities su = new SocketUtilities();
+							if (su.socketConnect() == true)
+							{	
+								//su.sendMessage(stocksshorted_vector);
+
+								//							String recvMsgStr = su.recvMessage();
+								//							su.sendMessage("QUIT>");
+								//
+								//							su.closeSocket();
+								//
+								//							JOptionPane.showMessageDialog(null,
+								//									"Message : " + recvMsgStr,
+								//									"Client",
+								//									JOptionPane.WARNING_MESSAGE);
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(null,
+										"ERROR: Connection to Socket Server is Down!",
+										"Client",
+										JOptionPane.WARNING_MESSAGE);
+							}
 						}
-					}
-				});
-				t.start();
+					});
+					t.start();
+				}
 			}
 		});
 		

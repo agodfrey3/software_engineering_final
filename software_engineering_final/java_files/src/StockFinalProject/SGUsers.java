@@ -46,5 +46,9 @@ public class SGUsers implements Serializable {
 	public Integer getTurnCounter() {
 		return turnCounter;
 	}
+	
+	public void setTurnCounter(int n) {
+		turnCounter = n;
+	}
 }
 
