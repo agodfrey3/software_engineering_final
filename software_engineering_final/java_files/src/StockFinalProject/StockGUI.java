@@ -44,7 +44,6 @@ public class StockGUI extends JPanel
 	private JButton long_button;
 	private JButton short_button;
 	private JButton leaderboard_button;
-//	private JButton transaction_button;
 	private JLabel account_title_label;
 	private JLabel account_label;
 	private JLabel lastgained_label;
@@ -219,12 +218,11 @@ public class StockGUI extends JPanel
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				String file_name = main_dir + listOfFiles[i].getName();
-				System.out.println("File " + file_name);
+//				System.out.println("File " + file_name);
 				graph_file_paths.add(file_name);
 			}
 		}
 	}
-
 	
 	// Calculates the gain/loss from longing a stock and updates the frames of the GUI
 	public void GameLogicLong() {
@@ -273,8 +271,6 @@ public class StockGUI extends JPanel
 		account_label.setText("$" + String.format("%.2f", account_balance));
 		pointsgained_label.setText("$" + String.format("%.2f", net));
 		turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
-		
-		// CHANGE THE IMAGE!
 	}
 	
 	/**
@@ -502,12 +498,6 @@ public class StockGUI extends JPanel
 		leaderboard_button.setOpaque(true);
 		leaderboard_button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		// Transaction History Button
-		/*transaction_button = new JButton("Transaction History");
-		transaction_button.setAlignmentX(Component.CENTER_ALIGNMENT);
-		turntranshistory_panel.add(Box.createRigidArea(new Dimension(0,450)));
-		turntranshistory_panel.add(transaction_button);*/
-		
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{	
@@ -569,13 +559,38 @@ public class StockGUI extends JPanel
 						transhistorydisplay_panel.removeAll();
 						transhistorydisplay_panel.revalidate();
 						transhistorydisplay_panel.repaint();
+						
+						try {
+							stockgraph_panel.removeAll();
+							
+							// Random number to choose a random file from the list of graphs.
+							randomNum = ThreadLocalRandom.current().nextInt(0, graph_file_paths.size());
+			
+							// Loads a graph image from the data directory.
+							BufferedImage stock_graph = ImageIO.read(new File(graph_file_paths.get(randomNum)));
+									
+							int type = stock_graph.getType() == 0? BufferedImage.TYPE_INT_ARGB : stock_graph.getType();
+									
+							BufferedImage resizedImage = new BufferedImage(590, 490, type);
+							Graphics2D g = resizedImage.createGraphics();
+							g.drawImage(stock_graph, 0, 0, 590, 490, null);
+							g.dispose();
+									
+							// Adds the image to a JLabel and then adds it to the JPanel.
+							JLabel stock_graph_label = new JLabel(new ImageIcon(resizedImage));
+							stockgraph_panel.add(stock_graph_label);
+						}
+						catch (IOException i) {
+							// In case of file not found error. Could potentially handle this more gracefully.
+							i.printStackTrace();
+						}
+						
 					} else {
 					    System.exit(0);
 					}
 				}
 				
 				else {
-
 					newuser_obj.addToStocksLonged("New Stock");
 
 					Thread t = new Thread(new Runnable()
@@ -614,7 +629,7 @@ public class StockGUI extends JPanel
 				}
 			}
 		});
-		
+				
 		short_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -676,6 +691,32 @@ public class StockGUI extends JPanel
 						transhistorydisplay_panel.removeAll();
 						transhistorydisplay_panel.revalidate();
 						transhistorydisplay_panel.repaint();
+						
+						try {
+							stockgraph_panel.removeAll();
+							
+							// Random number to choose a random file from the list of graphs.
+							randomNum = ThreadLocalRandom.current().nextInt(0, graph_file_paths.size());
+			
+							// Loads a graph image from the data directory.
+							BufferedImage stock_graph = ImageIO.read(new File(graph_file_paths.get(randomNum)));
+									
+							int type = stock_graph.getType() == 0? BufferedImage.TYPE_INT_ARGB : stock_graph.getType();
+									
+							BufferedImage resizedImage = new BufferedImage(590, 490, type);
+							Graphics2D g = resizedImage.createGraphics();
+							g.drawImage(stock_graph, 0, 0, 590, 490, null);
+							g.dispose();
+									
+							// Adds the image to a JLabel and then adds it to the JPanel.
+							JLabel stock_graph_label = new JLabel(new ImageIcon(resizedImage));
+							stockgraph_panel.add(stock_graph_label);
+						}
+						catch (IOException i){
+							// In case of file not found error. Could potentially handle this more gracefully.
+							i.printStackTrace();
+						}
+						
 					} else {
 					    System.exit(0);
 					}
