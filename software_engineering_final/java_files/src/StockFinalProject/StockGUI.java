@@ -60,7 +60,7 @@ public class StockGUI extends JPanel
 	private ArrayList<String> graph_file_paths = new ArrayList<String>();
 
 	public static int player_count = 1;
-	public static double account_balance = 100000.00;
+	public static double account_balance = -100000.00;
 	
 	public static int randomNum;
 	public static String graph_file_to_be_parsed;
@@ -239,6 +239,9 @@ public class StockGUI extends JPanel
 		// calculate the loss/gain
 		net = leverage * (future_price - current_price);
 		
+		if (net < 0) // losses are doubled
+			net *= 2;
+		
 		account_balance += net;
 		last_gained = net;
 	}
@@ -255,6 +258,9 @@ public class StockGUI extends JPanel
 		
 		// calculate the loss/gain
 		net = -1 * leverage * (future_price - current_price);
+		
+		if (net < 0) // losses are doubled
+			net *= 2;
 		
 		account_balance += net;
 		last_gained = net;
@@ -511,7 +517,18 @@ public class StockGUI extends JPanel
 				GameLogicLong();
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
-								
+						
+				JLabel editable_label = new JLabel();
+				editable_label.setText("Long " + ticker.toUpperCase());
+				editable_label.setAlignmentX(CENTER_ALIGNMENT);
+				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+				editable_label.setForeground(new Color(35, 142, 57));
+				
+				transhistorydisplay_panel.add(editable_label, 0);
+				transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
+				transhistorydisplay_panel.validate();
+				transhistorydisplay_panel.repaint();
+				
 				try {
 					stockgraph_panel.removeAll();
 					
@@ -548,24 +565,16 @@ public class StockGUI extends JPanel
 				if (account_balance <= 0) {
 					if (JOptionPane.showConfirmDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turn(s).\n\nPlay Again?", "Game Over!",
 					        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-					    ResetGame();
-					    transhistorydisplay_panel.removeAll();
+						ResetGame();
+						transhistorydisplay_panel.removeAll();
+						transhistorydisplay_panel.revalidate();
+						transhistorydisplay_panel.repaint();
 					} else {
 					    System.exit(0);
 					}
 				}
 				
 				else {
-					JLabel editable_label = new JLabel();
-					editable_label.setText("Long " + ticker.toUpperCase());
-					editable_label.setAlignmentX(CENTER_ALIGNMENT);
-					editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
-					editable_label.setForeground(new Color(35, 142, 57));
-
-					transhistorydisplay_panel.add(editable_label, 0);
-					transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
-					transhistorydisplay_panel.validate();
-					transhistorydisplay_panel.repaint();
 
 					newuser_obj.addToStocksLonged("New Stock");
 
@@ -616,6 +625,17 @@ public class StockGUI extends JPanel
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
 				
+				JLabel editable_label = new JLabel();
+				editable_label.setText("Short " + ticker.toUpperCase());
+				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+				editable_label.setForeground(Color.red);
+				editable_label.setAlignmentX(CENTER_ALIGNMENT);
+
+				transhistorydisplay_panel.add(editable_label,0);
+				transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
+				transhistorydisplay_panel.validate();
+				transhistorydisplay_panel.repaint();
+				
 				try {
 					stockgraph_panel.removeAll();
 					
@@ -652,24 +672,16 @@ public class StockGUI extends JPanel
 				if (account_balance <= 0) {
 					if (JOptionPane.showConfirmDialog(null, "Game Over, you lasted " + Integer.toString(newuser_obj.getTurnCounter()) + " turn(s).\n\nPlay Again?", "Game Over!",
 					        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-					    ResetGame();
-					    transhistorydisplay_panel.removeAll();
+						ResetGame();
+						transhistorydisplay_panel.removeAll();
+						transhistorydisplay_panel.revalidate();
+						transhistorydisplay_panel.repaint();
 					} else {
 					    System.exit(0);
 					}
 				}
 				
 				else {
-					JLabel editable_label = new JLabel();
-					editable_label.setText("Short " + ticker.toUpperCase());
-					editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
-					editable_label.setForeground(Color.red);
-					editable_label.setAlignmentX(CENTER_ALIGNMENT);
-
-					transhistorydisplay_panel.add(editable_label,0);
-					transhistorydisplay_panel.add(Box.createRigidArea(new Dimension(0,10)),0);
-					transhistorydisplay_panel.validate();
-					transhistorydisplay_panel.repaint();
 
 					newuser_obj.addToStocksShorted("New Stock");
 
