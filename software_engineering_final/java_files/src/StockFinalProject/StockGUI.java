@@ -431,6 +431,7 @@ public class StockGUI extends JPanel
 		tickerplaybuttons_panel.add(ticker_label);
 
 		GameLogicLong();
+		account_balance -= net;
 		ticker_label.setText(ticker.toUpperCase());
 		
 		// Price Label
