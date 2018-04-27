@@ -495,6 +495,9 @@ public class StockGUI extends JPanel
 				pointsgained_label.setText("$" + String.format("%.2f", net));
 						
 				JLabel editable_label = new JLabel();
+				
+				GameLogic("update");
+				
 				editable_label.setText("Long " + ticker.toUpperCase());
 				editable_label.setAlignmentX(CENTER_ALIGNMENT);
 				editable_label.setFont(new Font("Monospaced", Font.BOLD, 15));
@@ -629,6 +632,8 @@ public class StockGUI extends JPanel
 				GameLogic("short");
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
+				
+				GameLogic("update");
 				
 				JLabel editable_label = new JLabel();
 				editable_label.setText("Short " + ticker.toUpperCase());
