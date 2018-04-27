@@ -77,7 +77,7 @@ public class SocketServerGUI extends JFrame
 				   
 			    	try
 				    {
-					   sleep(5000L);
+					   sleep(1000L);
 				    }
 				    catch (InterruptedException e)
 				   {
