@@ -59,7 +59,7 @@ public class StockGUI extends JPanel
 	private ArrayList<String> graph_file_paths = new ArrayList<String>();
 
 	public static int player_count = 1;
-	public static double account_balance = -100000.00;
+	public static double account_balance = 100000.00;
 	
 	public static int randomNum;
 	public static String graph_file_to_be_parsed;
@@ -224,8 +224,8 @@ public class StockGUI extends JPanel
 		}
 	}
 	
-	// Calculates the gain/loss from longing a stock and updates the frames of the GUI
-	public void GameLogicLong() {
+	// Calculates the gain/loss from longing or shorting a stock and updates the frames of the GUI
+	public void GameLogic(String long_or_short) {
 		graph_file_to_be_parsed = graph_file_paths.get(randomNum);
 		String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);
 		
@@ -235,33 +235,19 @@ public class StockGUI extends JPanel
 		ticker = cleaned_file_name.split("_")[2];
 		
 		// calculate the loss/gain
-		net = leverage * (future_price - current_price);
 		
-		if (net < 0) // losses are doubled
-			net *= 2;
-		
-		account_balance += net;
-		last_gained = net;
-	}
-	
-	// Calculates the gain/loss from shorting a stock and updates the frames of the GUI
-	public void GameLogicShort() {
-		graph_file_to_be_parsed = graph_file_paths.get(randomNum);
-		String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);
-		
-		// parse file name
-		current_price = Double.parseDouble(cleaned_file_name.split("_")[0]);
-		future_price = Double.parseDouble(cleaned_file_name.split("_")[1]);
-		ticker = cleaned_file_name.split("_")[2];
-		
-		// calculate the loss/gain
-		net = -1 * leverage * (future_price - current_price);
-		
-		if (net < 0) // losses are doubled
-			net *= 2;
-		
-		account_balance += net;
-		last_gained = net;
+		if (long_or_short == "long" || long_or_short == "short") {
+			net = leverage * (future_price - current_price);
+
+			if (long_or_short == "short") // if it's a short then negate the net
+				net *= -1;
+
+			if (net < 0) // losses are doubled
+				net *= 2;
+
+			account_balance += net;
+			last_gained = net;
+		}
 	}
 	
 	public void ResetGame() {
@@ -432,7 +418,7 @@ public class StockGUI extends JPanel
 		ticker_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		tickerplaybuttons_panel.add(ticker_label);
 
-		GameLogicLong();
+		GameLogic("long");
 		account_balance -= net;
 		ticker_label.setText(ticker.toUpperCase());
 		
@@ -504,7 +490,7 @@ public class StockGUI extends JPanel
 				newuser_obj.addToTurnCounter();
 				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
-				GameLogicLong();
+				GameLogic("long");
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
 						
@@ -585,6 +571,10 @@ public class StockGUI extends JPanel
 							i.printStackTrace();
 						}
 						
+						GameLogic("update");
+						price_label.setText(String.format("%.2f", current_price));
+						ticker_label.setText(ticker.toUpperCase());
+						
 					} else {
 					    System.exit(0);
 					}
@@ -636,7 +626,7 @@ public class StockGUI extends JPanel
 				newuser_obj.addToTurnCounter();
 				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
-				GameLogicShort();
+				GameLogic("short");
 				account_label.setText("$" + String.format("%.2f", account_balance));
 				pointsgained_label.setText("$" + String.format("%.2f", net));
 				
@@ -716,6 +706,10 @@ public class StockGUI extends JPanel
 							// In case of file not found error. Could potentially handle this more gracefully.
 							i.printStackTrace();
 						}
+						
+						GameLogic("update");
+						price_label.setText(String.format("%.2f", current_price));
+						ticker_label.setText(ticker.toUpperCase());
 						
 					} else {
 					    System.exit(0);
