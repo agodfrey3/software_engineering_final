@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import pyplot as plt
 import numpy as np
+from os import listdir
+from os.path import isfile, join
 
 
 def format_df_for_graph(df):
@@ -15,12 +17,16 @@ def format_df_for_graph(df):
 
 def main():
 
-    tickers = ['aapl', 'ba', 'fb', 'goog', 'msft']
+    path = "c:/users/andrew/data/stock_data/training"
+    files = [f for f in listdir(path) if isfile(join(path, f))]
+    print(files)
 
-    for ticker in tickers:
-        data_path = f"C:/Users/God/data/stock_data/{ticker}_5y.csv"
+    for file in files:
 
-        df = pd.read_csv(data_path)
+        file_path = path + "/" + file
+        ticker = file.split("_")[0]
+
+        df = pd.read_csv(file_path)
         df = format_df_for_graph(df)
 
         dfs = np.array_split(df, 10)
