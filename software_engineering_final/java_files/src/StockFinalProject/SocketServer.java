@@ -18,13 +18,14 @@ import java.io.ObjectInputStream;
 
 public class SocketServer implements Runnable
 {
-	   Socket csocket;
+	   static Socket csocket;
 	   String ipString;
 	   char threadType;
 
 	   static Vector<String> vec = new Vector<String>(5);
 	   static Hashtable<String, SGUsers> usersplaying_hash = new Hashtable<String, SGUsers>();
-
+	   static String clientKey = "NOTHERE";
+	   
 	   static final String newline = "\n";
 	   static int first_time = 1;
 	   
@@ -75,7 +76,16 @@ public class SocketServer implements Runnable
 	     SocketServerGUI.textArea.append("Listening on Port: " + port_num + newline);
 	     SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	     SocketServerGUI.textArea.repaint();
-	 
+	     
+//		try {
+//			//ObjectInputStream in_os = new ObjectInputStream(csocket.getInputStream());
+//			BufferedReader rstream = new BufferedReader(new InputStreamReader(csocket.getInputStream()));
+//			clientKey = rstream.readLine();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+	     
 	     sessionDone = false;
 	     while (sessionDone == false)
 	     {
@@ -89,13 +99,15 @@ public class SocketServer implements Runnable
 		    {
 			   e.printStackTrace();
 		    }
-		 
+		    
+		    if(clientKey == "NOTHERE") {
 		    // update the status text area to show progress of program
-	        SocketServerGUI.textArea.append("Client Connected: " + sock.getInetAddress() + newline);
+	        SocketServerGUI.textArea.append("Client Connected: " + sock.getInetAddress().toString().replace('/', ' ') + newline);
 	        SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	        SocketServerGUI.textArea.repaint();
-	        
+		    }
 	        new Thread(new SocketServer(sock, sock.getInetAddress().toString())).start();
+		    
 	     }
 	 
 	     try 
@@ -116,12 +128,19 @@ public class SocketServer implements Runnable
 		  boolean session_done = false; 
 	      long threadId;
 	      String clientString;
+	      //String clientKey;
 	      //String numTurns;
 	      String keyString = "";
 	    
 	      threadId = Thread.currentThread().getId();
 	      
-	      numOfConnections++;
+	      BufferedReader rstream = new BufferedReader(new InputStreamReader(csocket.getInputStream()));
+	      ObjectInputStream in_os = new ObjectInputStream(csocket.getInputStream());
+	      
+	      //clientKey = rstream.readLine();
+	      
+	      if(!usersplaying_hash.containsKey(clientKey) && clientKey != "NOTHERE") {
+	    	  numOfConnections++;
 	      
 	      SocketServerGUI.textArea.append("Number of Connections = " + numOfConnections + newline);
 	      SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
@@ -149,24 +168,22 @@ public class SocketServer implements Runnable
 
   	            SocketServerGUI.textArea_2.repaint();
 	        }
-	      
-	      BufferedReader rstream = new BufferedReader(new InputStreamReader(csocket.getInputStream()));
+	      }
 //	      ObjectOutputStream out_os = new ObjectOutputStream(csocket.getOutputStream());
-	      ObjectInputStream in_os = new ObjectInputStream(csocket.getInputStream());
+//	      ObjectInputStream in_os = new ObjectInputStream(csocket.getInputStream());
 	      
 	      while (session_done == false)
 	      {
 	       	if (rstream.ready())   // check for any data messages
 	       	{
 	       		  SGUserKO userKO = (SGUserKO) in_os.readObject();
-	       		  
-	       		  usersplaying_hash.put(userKO.getUserKey(), userKO.getUserObj());
+	       		  clientKey = userKO.getUserKey();
+	       		  usersplaying_hash.put(clientKey, userKO.getUserObj());
 	  	   	       		  
 	              clientString = usersplaying_hash.get(userKO.getUserKey()).getUserName();
 	              
 	              //usersplaying_hash.get(testkey).addToTurnCounter();
 	              //numTurns = Integer.toString(usersplaying_hash.get(testkey).getTurnCounter());
-	              
 	              
 	              // update the status text area to show progress of program
 	   	           SocketServerGUI.textArea.append("User: " + clientString /*+ numTurns*/ + newline);

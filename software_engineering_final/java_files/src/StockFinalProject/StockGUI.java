@@ -488,7 +488,8 @@ public class StockGUI extends JPanel
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{	
-				newuser_obj.addToTurnCounter();
+				//newuser_obj.addToTurnCounter();
+				
 				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
 				GameLogic("long");
@@ -594,6 +595,8 @@ public class StockGUI extends JPanel
 							SocketUtilities su = new SocketUtilities();
 							if (su.socketConnect() == true)
 							{	
+								
+								su.sendKey(user_key);
 								//su.incrementLS(user_key);
 
 								//							ObjectOutputStream outputStream;
