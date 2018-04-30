@@ -3,15 +3,23 @@ package StockFinalProject;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.Box;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
 import javax.swing.JTextArea;
 import java.awt.Font;
 
@@ -136,8 +144,60 @@ public class SocketServerGUI extends JFrame
 		panel_2.setBounds(123, 466, 103, 109);
 		contentPane.add(panel_2);
 		
-		JButton btnNewButton = new JButton("1");
+		JButton btnNewButton = new JButton("Analytics");
 		panel_2.add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+
+				JFrame analysis_frame = new JFrame("Analytics");    
+				analysis_frame.setSize(400, 400);
+				analysis_frame.setLayout(null);
+	            analysis_frame.setLocationRelativeTo(null);
+	            analysis_frame.setVisible(true);
+	            
+	            JLabel long_label = new JLabel();
+	            JLabel short_label = new JLabel();
+	            JLabel long_percentage = new JLabel();
+	            JLabel short_percentage = new JLabel();
+	           
+				GridLayout analysisLayout = new GridLayout(0, 2);
+
+		        analysis_frame.setLayout(analysisLayout);
+
+				long_label.setText("Total Longs");
+				long_label.setAlignmentX(CENTER_ALIGNMENT);
+				long_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+				long_label.setForeground(new Color(35, 142, 57));
+				long_label.setHorizontalAlignment(JLabel.CENTER);
+			    long_label.setVerticalAlignment(JLabel.CENTER);
+			    long_label.setPreferredSize(new Dimension(100, 50));
+				
+				short_label.setText("Total Shorts");
+				short_label.setAlignmentX(CENTER_ALIGNMENT);
+				short_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+				short_label.setForeground(Color.red);
+				short_label.setHorizontalAlignment(JLabel.CENTER);
+			    short_label.setVerticalAlignment(JLabel.CENTER);
+			    short_label.setPreferredSize(new Dimension(100, 50));
+			    
+				long_percentage.setText("51% of Trades");
+				long_percentage.setHorizontalAlignment(JLabel.CENTER);
+				long_percentage.setVerticalAlignment(JLabel.CENTER);
+				long_percentage.setPreferredSize(new Dimension(100, 50));
+				
+				short_percentage.setText("49% of Trades");
+				short_percentage.setHorizontalAlignment(JLabel.CENTER);
+				short_percentage.setVerticalAlignment(JLabel.CENTER);
+				short_percentage.setPreferredSize(new Dimension(100, 50));
+				
+				analysis_frame.add(long_label, BorderLayout.CENTER);
+				analysis_frame.add(short_label);
+				analysis_frame.add(long_percentage);
+				analysis_frame.add(short_percentage);
+			}	
+			});
+		
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(10, 466, 103, 109);
@@ -147,7 +207,7 @@ public class SocketServerGUI extends JFrame
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				System.exit(0);;
+				System.exit(0);
 			}
 		});
 		panel_3.add(btnNewButton_1);

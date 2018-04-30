@@ -117,7 +117,7 @@ public class SocketUtilities
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
-			System.out.println("somethings wrong with sendmessage");
+			System.out.println("Something went wrong with sendmessage");
 			e.printStackTrace();
 		}
 		

@@ -192,6 +192,7 @@ public class StockGUI extends JPanel
 							su.sendUserKO(userKO);
 							
 					        //System.out.println("returned key is = " + user_key);
+							
 							su.closeSocket();
 						}
 						else
@@ -599,8 +600,8 @@ public class StockGUI extends JPanel
 								//							try {
 								//								outputStream = new ObjectOutputStream(su.clientSocket.getOutputStream());
 								//								String[] names = new String[1]; // Empty at the moment
-								//								names[0] = "Fart";
-								//								String temp = "fart";
+								//								names[0] = "Blah";
+								//								String temp = "blah";
 								//								outputStream.writeObject(temp);
 								//							} catch (IOException e) {
 								//								// TODO Auto-generated catch block
