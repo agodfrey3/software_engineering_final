@@ -1,5 +1,5 @@
 # The Stock Market Game
-###### Created By: Andrew Godfrey, Kevin Ho, Saul Soto ######
+###### Created By: Andrew Godfrey, Kevin Ho and Saul Soto ######
 
 ## Gameplay
 
