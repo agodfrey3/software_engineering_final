@@ -124,6 +124,27 @@ public class SocketUtilities
 		return rc;
 	}
 	
+	public boolean sendKey(String key) {
+		boolean rc = false;
+		
+		try 
+		{
+//			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
+//			out_os.writeObject(userKO);
+			
+			outToServer.writeBytes(key);
+			rc = true;
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			System.out.println("somethings wrong with sendmessage");
+			e.printStackTrace();
+		}
+		
+		return rc;
+	}
+	
 //	public boolean incrementLS(String userKey)
 //	{
 //		boolean rc=false;
