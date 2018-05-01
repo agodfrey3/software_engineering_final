@@ -3,7 +3,7 @@
 
 ## Gameplay
 
-The Stock Market Game is intended to demonstrate how difficult it is to correctly predict the price movements in the stock market. In this game the goal is to last the longest number of turns by making long/short transactions and keeping your account in the positive. Each transaction is leveraged so that the user is buying 5,000 shares, and losses are doubled in order to make the game more difficult.
+The Stock Market Game is intended to demonstrate how difficult it is to correctly predict the price movements in the stock market. In this game, the goal is to last the longest number of turns by making long/short transactions and keeping your account in the positive. Each transaction is leveraged so that 5,000 shares are being longed or shorted, and losses are doubled in order to make the game more difficult.
 
 ## Features
 
