@@ -63,10 +63,9 @@ public class SocketServerGUI extends JFrame
 
     refreshWeatherThread.start();
   }
-	
   
   /*
-   * Thread to update weather info for NYC and Boston    
+   * Thread to get the real time   
    */     
   private void startRealTimeClock()
   {	
@@ -160,7 +159,9 @@ public class SocketServerGUI extends JFrame
 	            JLabel short_label = new JLabel();
 	            JLabel long_percentage = new JLabel();
 	            JLabel short_percentage = new JLabel();
-	           
+	            JLabel correct_label = new JLabel();
+	            JLabel correct_percentage = new JLabel();
+	            
 				GridLayout analysisLayout = new GridLayout(0, 2);
 
 		        analysis_frame.setLayout(analysisLayout);
@@ -191,13 +192,30 @@ public class SocketServerGUI extends JFrame
 				short_percentage.setVerticalAlignment(JLabel.CENTER);
 				short_percentage.setPreferredSize(new Dimension(100, 50));
 				
+	            correct_label.setText("Prediction Accuracy:");
+	            correct_label.setHorizontalAlignment(JLabel.CENTER);
+	            correct_label.setVerticalAlignment(JLabel.CENTER);
+	            correct_label.setPreferredSize(new Dimension(100, 50));
+	            
+	            correct_percentage.setText("88%");
+	            correct_percentage.setHorizontalAlignment(JLabel.CENTER);
+	            correct_percentage.setVerticalAlignment(JLabel.CENTER);
+	            correct_percentage.setPreferredSize(new Dimension(100, 50));
+				
+				// To space and format the position of the cells
+				JLabel blank_label_space1 = new JLabel();
+				JLabel blank_label_space2 = new JLabel();
+				
 				analysis_frame.add(long_label, BorderLayout.CENTER);
 				analysis_frame.add(short_label);
 				analysis_frame.add(long_percentage);
 				analysis_frame.add(short_percentage);
+				analysis_frame.add(blank_label_space1);
+				analysis_frame.add(blank_label_space2);
+				analysis_frame.add(correct_label);
+				analysis_frame.add(correct_percentage);
 			}	
 			});
-		
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(10, 466, 103, 109);
@@ -211,27 +229,6 @@ public class SocketServerGUI extends JFrame
 			}
 		});
 		panel_3.add(btnNewButton_1);
-		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBounds(236, 466, 103, 109);
-		contentPane.add(panel_4);
-		
-		JButton btnR = new JButton("2");
-		panel_4.add(btnR);
-		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBounds(349, 466, 103, 109);
-		contentPane.add(panel_5);
-		
-		JButton btnNewButton_2 = new JButton("3");
-		panel_5.add(btnNewButton_2);
-		
-		JPanel panel_6 = new JPanel();
-		panel_6.setBounds(462, 466, 103, 109);
-		contentPane.add(panel_6);
-		
-		JButton btnNewButton_3 = new JButton("4");
-		panel_6.add(btnNewButton_3);
 		
 		JPanel panel_7 = new JPanel();
 		panel_7.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -255,27 +252,6 @@ public class SocketServerGUI extends JFrame
 		textArea_2.setRows(3);
 		textArea_2.setColumns(70);
 		panel_8.add(textArea_2);
-		
-		JPanel panel_9 = new JPanel();
-		panel_9.setBounds(575, 466, 103, 109);
-		contentPane.add(panel_9);
-		
-		JButton btnNewButton_4 = new JButton("5");
-		panel_9.add(btnNewButton_4);
-		
-		JPanel panel_10 = new JPanel();
-		panel_10.setBounds(688, 466, 103, 109);
-		contentPane.add(panel_10);
-		
-		JButton btnNewButton_5 = new JButton("6");
-		panel_10.add(btnNewButton_5);
-		
-		JPanel panel_11 = new JPanel();
-		panel_11.setBounds(801, 466, 103, 109);
-		contentPane.add(panel_11);
-		
-		JButton btnNewButton_6 = new JButton("7");
-		panel_11.add(btnNewButton_6);
 		
 		startSocketServer();
 		

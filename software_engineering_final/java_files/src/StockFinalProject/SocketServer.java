@@ -102,7 +102,7 @@ public class SocketServer implements Runnable
 		    
 		    if(clientKey == "NOTHERE") {
 		    // update the status text area to show progress of program
-	        SocketServerGUI.textArea.append("Client Connected: " + sock.getInetAddress().toString().replace('/', ' ') + newline);
+	        SocketServerGUI.textArea.append("Client Connected: " + sock.getInetAddress().toString().replace("/", "") + newline);
 	        SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	        SocketServerGUI.textArea.repaint();
 		    }
@@ -190,7 +190,7 @@ public class SocketServer implements Runnable
 	     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	     	       SocketServerGUI.textArea.repaint();
 	     	       // update the status text area to show progress of program
-	     	       SocketServerGUI.textArea.append("RLEN : " + clientString.length() + newline);
+	     	       // SocketServerGUI.textArea.append("RLEN : " + clientString.length() + newline);
 	     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	     	       SocketServerGUI.textArea.repaint();
 	              
@@ -273,14 +273,14 @@ public class SocketServer implements Runnable
 	     catch (UnknownHostException e)
 	     {
 		  // update the status text area to show progress of program
-	      SocketServerGUI.textArea.append("ERROR: Unkonw Host Exception" + newline);
+	      SocketServerGUI.textArea.append("ERROR: Unknown Host Exception" + newline);
 	      SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	      SocketServerGUI.textArea.repaint();
 	     }
 	     catch (IOException e) 
 	     {
 	     // update the status text area to show progress of program
-	      SocketServerGUI.textArea.append("ERROR: IO Exception!" + newline);
+	     // SocketServerGUI.textArea.append("ERROR: IO Exception!" + newline);
 	      SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	      SocketServerGUI.textArea.repaint();       
 	     }     
