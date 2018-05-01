@@ -13,6 +13,7 @@ The Stock Market Game is intended to demonstrate how difficult it is to correctl
 - [X] Leveraged transaction mechanic implemented
 - [X] Users can play the game multiple times
 - [X] Client communicates with the server
+- [X] Analysis page
 
 ## Screenshots
 
