@@ -16,5 +16,7 @@ The Stock Market Game is intended to demonstrate how difficult it is to correctl
 - [X] Analysis page
 
 ## Screenshots
-![Alt text](https://github.com/agodfrey3/software_engineering_final/blob/master/software_engineering_final/Screenshots/Client.png)
-![Alt text](https://github.com/agodfrey3/software_engineering_final/blob/master/software_engineering_final/Screenshots/Analysis.png)
+![Client](https://github.com/agodfrey3/software_engineering_final/blob/master/software_engineering_final/Screenshots/Client.png)
+<p align="center">
+  <img width="400" height="400" src="https://github.com/agodfrey3/software_engineering_final/blob/master/software_engineering_final/Screenshots/Analysis.png">
+</p>
