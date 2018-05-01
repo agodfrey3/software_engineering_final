@@ -157,6 +157,8 @@ public class SocketServerGUI extends JFrame
 	            
 	            JLabel long_label = new JLabel();
 	            JLabel short_label = new JLabel();
+				JLabel num_correct_long_label = new JLabel();
+				JLabel num_correct_short_label = new JLabel();
 	            JLabel long_percentage = new JLabel();
 	            JLabel short_percentage = new JLabel();
 	            JLabel correct_label = new JLabel();
@@ -172,7 +174,6 @@ public class SocketServerGUI extends JFrame
 				long_label.setForeground(new Color(35, 142, 57));
 				long_label.setHorizontalAlignment(JLabel.CENTER);
 			    long_label.setVerticalAlignment(JLabel.CENTER);
-			    long_label.setPreferredSize(new Dimension(100, 50));
 				
 				short_label.setText("Total Shorts");
 				short_label.setAlignmentX(CENTER_ALIGNMENT);
@@ -180,38 +181,39 @@ public class SocketServerGUI extends JFrame
 				short_label.setForeground(Color.red);
 				short_label.setHorizontalAlignment(JLabel.CENTER);
 			    short_label.setVerticalAlignment(JLabel.CENTER);
-			    short_label.setPreferredSize(new Dimension(100, 50));
+			    
+				num_correct_long_label.setText(0 + " Longs");
+				num_correct_long_label.setHorizontalAlignment(JLabel.CENTER);
+				num_correct_long_label.setVerticalAlignment(JLabel.CENTER);
+				
+				num_correct_short_label.setText(0 + " Shorts");
+				num_correct_short_label.setHorizontalAlignment(JLabel.CENTER);
+				num_correct_short_label.setVerticalAlignment(JLabel.CENTER);
 			    
 				long_percentage.setText("51% of Trades");
 				long_percentage.setHorizontalAlignment(JLabel.CENTER);
 				long_percentage.setVerticalAlignment(JLabel.CENTER);
-				long_percentage.setPreferredSize(new Dimension(100, 50));
 				
 				short_percentage.setText("49% of Trades");
 				short_percentage.setHorizontalAlignment(JLabel.CENTER);
 				short_percentage.setVerticalAlignment(JLabel.CENTER);
-				short_percentage.setPreferredSize(new Dimension(100, 50));
 				
 	            correct_label.setText("Prediction Accuracy:");
+	            correct_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+	            correct_label.setForeground(Color.blue);
 	            correct_label.setHorizontalAlignment(JLabel.CENTER);
 	            correct_label.setVerticalAlignment(JLabel.CENTER);
-	            correct_label.setPreferredSize(new Dimension(100, 50));
 	            
 	            correct_percentage.setText("88%");
 	            correct_percentage.setHorizontalAlignment(JLabel.CENTER);
 	            correct_percentage.setVerticalAlignment(JLabel.CENTER);
-	            correct_percentage.setPreferredSize(new Dimension(100, 50));
-				
-				// To space and format the position of the cells
-				JLabel blank_label_space1 = new JLabel();
-				JLabel blank_label_space2 = new JLabel();
 				
 				analysis_frame.add(long_label, BorderLayout.CENTER);
 				analysis_frame.add(short_label);
+				analysis_frame.add(num_correct_long_label);
+				analysis_frame.add(num_correct_short_label);
 				analysis_frame.add(long_percentage);
 				analysis_frame.add(short_percentage);
-				analysis_frame.add(blank_label_space1);
-				analysis_frame.add(blank_label_space2);
 				analysis_frame.add(correct_label);
 				analysis_frame.add(correct_percentage);
 			}	
@@ -256,7 +258,7 @@ public class SocketServerGUI extends JFrame
 		startSocketServer();
 		
 		startRealTimeClock();
-		
+
 		this.setLocationRelativeTo(null);
 	}
 }

@@ -11,6 +11,10 @@ public class SGUsers implements Serializable {
 	private String username;
 	private int turnCounter = 0;
 	private Double balance = 0.0;
+	private int number_of_longs = 0;
+	private int number_of_shorts = 0;
+	private int number_of_correct = 0;
+	private int number_of_neutral = 0;
 	private Vector<String>stockslonged_vector = new Vector<String>();
 	private Vector<String>stocksshorted_vector = new Vector<String>();
 	
