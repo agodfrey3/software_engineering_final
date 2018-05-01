@@ -17,4 +17,4 @@ The Stock Market Game is intended to demonstrate how difficult it is to correctl
 
 ## Screenshots
 
-![Alt text](/blob/master/software_engineering_final/Screenshots/Analysis.png)
+![Alt text](/Screenshots/Analysis.png)
