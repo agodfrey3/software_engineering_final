@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Random;
 //import java.util.Vector;
 import java.io.File;
+import java.awt.BorderLayout;
 //import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 //import java.util.concurrent.TimeUnit;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 
 public class StockGUI extends JPanel
 {
@@ -43,7 +45,7 @@ public class StockGUI extends JPanel
 	private static String user_key;
 	private JButton long_button;
 	private JButton short_button;
-	private JButton leaderboard_button;
+	private JButton analytics_button;
 	private JLabel account_title_label;
 	private JLabel account_label;
 	private JLabel lastgained_label;
@@ -68,6 +70,11 @@ public class StockGUI extends JPanel
 	public static double net;
 	public static String ticker;
 	public static double last_gained = 0.0;
+	public static int number_of_longs = 0;
+	public static int number_of_shorts = 0;
+	public static int number_of_correct = 0;
+	public static int number_of_neutral = 0;
+	
 	
 	public static final double leverage = 5000.0; // How many shares of each stock you transact with
 	
@@ -82,13 +89,13 @@ public class StockGUI extends JPanel
 			  public void run()
 			  {   
 				 while (true)
-				 {	 			      
-					   Date date = new Date();
-					   String str = String.format("     %tc", date);
+				 {
+					 Date date = new Date();
+					 String str = String.format("     %tc", date);
 					 
-				   clock_textarea.setText("");
-				   clock_textarea.append(str);
-				   clock_textarea.repaint();
+					 clock_textarea.setText("");
+					 clock_textarea.append(str);
+					 clock_textarea.repaint();
 				   
 			    	try
 				    {
@@ -236,13 +243,23 @@ public class StockGUI extends JPanel
 		ticker = cleaned_file_name.split("_")[2];
 		
 		// calculate the loss/gain
-		
 		if (long_or_short == "long" || long_or_short == "short") {
 			net = leverage * (future_price - current_price);
 
+			if (long_or_short == "long")
+				number_of_longs++;
+			if (long_or_short == "short")
+				number_of_shorts++;
+			
 			if (long_or_short == "short") // if it's a short then negate the net
 				net *= -1;
 
+			if (net > 0) // if the transaction made money then the user is correct
+				number_of_correct++;
+			
+			if (net == 0)
+				number_of_neutral++;
+			
 			if (net < 0) // losses are doubled
 				net *= 2;
 
@@ -255,6 +272,10 @@ public class StockGUI extends JPanel
 		account_balance = 100000.00;
 		net = 0.0;
 		newuser_obj.setTurnCounter(0);
+		number_of_longs = 0;
+		number_of_shorts = 0;
+		number_of_correct = 0;
+		number_of_neutral = 0;
 		account_label.setText("$" + String.format("%.2f", account_balance));
 		pointsgained_label.setText("$" + String.format("%.2f", net));
 		turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
@@ -282,7 +303,7 @@ public class StockGUI extends JPanel
 		encompassing_panel.setBackground(new Color(24, 110, 155));
 
 		// Panel that houses users remaining balance label, balance amount, points gained panel/label,
-		// and the leaderboard button
+		// and the analytics button
 		JPanel balanceleaderboard_panel = new JPanel();
 		// Organizes components from top to bottom, starting with the first added component
 		balanceleaderboard_panel.setLayout(new BoxLayout(balanceleaderboard_panel, BoxLayout.Y_AXIS));
@@ -419,7 +440,7 @@ public class StockGUI extends JPanel
 		ticker_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		tickerplaybuttons_panel.add(ticker_label);
 
-		GameLogic("long");
+		GameLogic("update");
 		account_balance -= net;
 		ticker_label.setText(ticker.toUpperCase());
 		
@@ -477,13 +498,102 @@ public class StockGUI extends JPanel
 		short_button.setBackground(Color.RED);
 		playbuttons_panel.add(short_button);
 
-		// Leaderboard Button
-		leaderboard_button = new JButton("Leaderboard");
-		leaderboard_button.setForeground(Color.white);
-		leaderboard_button.setPreferredSize(new Dimension(150,50));
-		leaderboard_button.setBackground(new Color(6, 135, 137));
-		leaderboard_button.setOpaque(true);
-		leaderboard_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		// Analytics Button
+		analytics_button = new JButton("Analytics");
+		analytics_button.setForeground(Color.white);
+		analytics_button.setPreferredSize(new Dimension(150,50));
+		analytics_button.setBackground(new Color(6, 135, 137));
+		analytics_button.setOpaque(true);
+		analytics_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		analytics_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				JFrame analysis_frame = new JFrame("Analytics");    
+				analysis_frame.setSize(400, 400);
+				analysis_frame.setLayout(null);
+	            analysis_frame.setLocationRelativeTo(null);
+	            analysis_frame.setVisible(true);
+	            
+	            JLabel long_label = new JLabel();
+	            JLabel short_label = new JLabel();
+	            JLabel long_percentage = new JLabel();
+	            JLabel short_percentage = new JLabel();
+	            JLabel correct_label = new JLabel();
+	            JLabel correct_percentage = new JLabel();
+	            
+				GridLayout analysisLayout = new GridLayout(0, 2);
+
+		        analysis_frame.setLayout(analysisLayout);
+
+				long_label.setText("Total Longs");
+				long_label.setAlignmentX(CENTER_ALIGNMENT);
+				long_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+				long_label.setForeground(new Color(35, 142, 57));
+				long_label.setHorizontalAlignment(JLabel.CENTER);
+			    long_label.setVerticalAlignment(JLabel.CENTER);
+				
+				short_label.setText("Total Shorts");
+				short_label.setAlignmentX(CENTER_ALIGNMENT);
+				short_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+				short_label.setForeground(Color.red);
+				short_label.setHorizontalAlignment(JLabel.CENTER);
+			    short_label.setVerticalAlignment(JLabel.CENTER);
+			    
+			    double long_percent;
+			    double short_percent;
+			    double correct_percent;
+			    
+			    if (newuser_obj.getTurnCounter() == 0) {
+			    	long_percent = 0.0;
+			    	short_percent = 0.0;
+			    	correct_percent = 0.0;
+			    }
+			    else {
+			    	long_percent = (double) number_of_longs / (double) newuser_obj.getTurnCounter() * 100.0;
+			    	short_percent = (double) number_of_shorts / (double) newuser_obj.getTurnCounter() * 100.0;
+			    	correct_percent = (double) number_of_correct / (double) newuser_obj.getTurnCounter() * 100.0;
+			    }
+			    	
+				long_percentage.setText(String.format("%.2f", long_percent) + "% of Trades");
+				long_percentage.setHorizontalAlignment(JLabel.CENTER);
+				long_percentage.setVerticalAlignment(JLabel.CENTER);
+				
+				short_percentage.setText(String.format("%.2f", short_percent) + "% of Trades");
+				short_percentage.setHorizontalAlignment(JLabel.CENTER);
+				short_percentage.setVerticalAlignment(JLabel.CENTER);
+				
+				JLabel num_correct_long_label = new JLabel();
+				JLabel num_correct_short_label = new JLabel();
+				
+				num_correct_long_label.setText(number_of_longs + " Longs");
+				num_correct_long_label.setHorizontalAlignment(JLabel.CENTER);
+				num_correct_long_label.setVerticalAlignment(JLabel.CENTER);
+				
+				num_correct_short_label.setText(number_of_shorts + " Shorts");
+				num_correct_short_label.setHorizontalAlignment(JLabel.CENTER);
+				num_correct_short_label.setVerticalAlignment(JLabel.CENTER);
+				
+	            correct_label.setText("Prediction Accuracy:");
+	            correct_label.setFont(new Font("Monospaced", Font.BOLD, 15));
+	            correct_label.setForeground(Color.blue);
+	            correct_label.setHorizontalAlignment(JLabel.CENTER);
+	            correct_label.setVerticalAlignment(JLabel.CENTER);
+	            
+	            correct_percentage.setText(String.format("%.2f", correct_percent) + "%");
+	            correct_percentage.setHorizontalAlignment(JLabel.CENTER);
+	            correct_percentage.setVerticalAlignment(JLabel.CENTER);
+				
+				analysis_frame.add(long_label);
+				analysis_frame.add(short_label);
+				analysis_frame.add(num_correct_long_label);
+				analysis_frame.add(num_correct_short_label);
+				analysis_frame.add(long_percentage);
+				analysis_frame.add(short_percentage);
+				analysis_frame.add(correct_label);
+				analysis_frame.add(correct_percentage);
+			}	
+		});
 		
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -762,7 +872,7 @@ public class StockGUI extends JPanel
 			}
 		});
 		
-		leaderboard_button.addActionListener(new ActionListener() {
+		analytics_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 //				Thread t = new Thread(new Runnable()
@@ -840,7 +950,7 @@ public class StockGUI extends JPanel
 		encompassing_panel.add(tickerplaybuttons_panel);
 		right_panel.add(turntranshistory_panel);
 		right_panel.add(Box.createRigidArea(new Dimension(0,10)));
-		right_panel.add(leaderboard_button);
+		right_panel.add(analytics_button);
 		right_panel.add(Box.createRigidArea(new Dimension(0,25)));
 		encompassing_panel.add(right_panel);
 		add(encompassing_panel);

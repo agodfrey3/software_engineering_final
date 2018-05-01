@@ -215,7 +215,7 @@ public class SocketServerGUI extends JFrame
 				analysis_frame.add(correct_label);
 				analysis_frame.add(correct_percentage);
 			}	
-			});
+		});
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(10, 466, 103, 109);

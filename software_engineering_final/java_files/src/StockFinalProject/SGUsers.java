@@ -9,7 +9,7 @@ public class SGUsers implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String username;
-	private Integer turnCounter = 0;
+	private int turnCounter = 0;
 	private Double balance = 0.0;
 	private Vector<String>stockslonged_vector = new Vector<String>();
 	private Vector<String>stocksshorted_vector = new Vector<String>();
@@ -43,7 +43,7 @@ public class SGUsers implements Serializable {
 		return balance;
 	}
 	
-	public Integer getTurnCounter() {
+	public int getTurnCounter() {
 		return turnCounter;
 	}
 	
