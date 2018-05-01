@@ -8,7 +8,7 @@ The Stock Market Game is intended to demonstrate how difficult it is to correctl
 ## Features
 
 - [X] Users can select a username
-- [X] Users can view historical Dow 30 prices
+- [X] Users can view historical prices of Dow 30 stocks
 - [X] Users can see their turn count
 - [X] Leveraged transaction mechanic implemented
 - [X] Users can play the game multiple times
