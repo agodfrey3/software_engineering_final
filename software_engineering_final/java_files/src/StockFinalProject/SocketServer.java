@@ -211,8 +211,10 @@ public class SocketServer implements Runnable
 						  usersplaying_hash.replace(clientKey, userKO.getUserObj());		  	 
 						  clientString = usersplaying_hash.get(clientKey).getUserName();
 						  Integer turnCounter = usersplaying_hash.get(clientKey).getTurnCounter();
+						  String action = usersplaying_hash.get(clientKey).getActionPerformed();
 						  // update the status text area to show progress of program
 						   SocketServerGUI.textArea_3.append(clientString + " is on turn " + turnCounter + newline);
+                           SocketServerGUI.textArea_3.append(clientString + " performed action: " + action + newline);
 						   SocketServerGUI.textArea_3.setCaretPosition(SocketServerGUI.textArea_3.getDocument().getLength());
 						   SocketServerGUI.textArea_3.repaint();
 						   // update the status text area to show progress of program

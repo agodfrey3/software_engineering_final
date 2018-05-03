@@ -9,6 +9,7 @@ public class SGUsers implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String username;
+	private String actionPerformed;
 	private int turnCounter = 0;
 	private Double balance = 0.0;
 	private int number_of_longs = 0;
@@ -22,7 +23,11 @@ public class SGUsers implements Serializable {
 	public void setUserName(String userName) {
 		username = userName;
 	}
-	
+
+	public void setActionPerformed(String action) {this.actionPerformed = action;}
+
+	public String getActionPerformed() { return this.actionPerformed; }
+
 	public void addToTurnCounter() {
 		turnCounter++;
 	}
