@@ -618,6 +618,8 @@ private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent e) {
 				newuser_obj.addToTurnCounter();
 				
+				newuser_obj.setActionPerformed("Long Stock");
+				
 				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
 				GameLogic("long");
@@ -773,6 +775,8 @@ private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent e) {
 				newuser_obj.addToTurnCounter();
 
+				newuser_obj.setActionPerformed("Short Stock");
+				
 				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
 				GameLogic("short");

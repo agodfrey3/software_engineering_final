@@ -211,8 +211,10 @@ public class SocketServer implements Runnable
 						  usersplaying_hash.replace(clientKey, userKO.getUserObj());		  	 
 						  clientString = userKO.getUserObj().getUserName();
 						  Integer turnCounter = usersplaying_hash.get(clientKey).getTurnCounter();
+						  String action = usersplaying_hash.get(clientKey).getActionPerformed();
 						  // update the status text area to show progress of program
-						   SocketServerGUI.textArea_3.append(clientString + " is on turn " + turnCounter + newline);
+						   SocketServerGUI.textArea_3.append(clientString + " is on Turn " + turnCounter + newline);
+                           SocketServerGUI.textArea_3.append(clientString + " Performed Action: " + action + newline);
 						   SocketServerGUI.textArea_3.setCaretPosition(SocketServerGUI.textArea_3.getDocument().getLength());
 						   SocketServerGUI.textArea_3.repaint();
 						   // update the status text area to show progress of program
@@ -222,7 +224,7 @@ public class SocketServer implements Runnable
 	       		  }	           
 	       	   }
 	         			    		        	
-	           Thread.sleep(500);
+//	           Thread.sleep(500);
 	           
 	        }    // end while loop
 
@@ -237,13 +239,13 @@ public class SocketServer implements Runnable
 	      SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 	      SocketServerGUI.textArea.repaint();
 	     }
-	     catch (InterruptedException e)
-	     {
-		  // update the status text area to show progress of program
-	      SocketServerGUI.textArea.append("ERROR: Interrupted Exception!" + newline);
-	      SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
-	      SocketServerGUI.textArea.repaint();
-	     }
+//	     catch (InterruptedException e)
+//	     {
+//		  // update the status text area to show progress of program
+//	      SocketServerGUI.textArea.append("ERROR: Interrupted Exception!" + newline);
+//	      SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
+//	      SocketServerGUI.textArea.repaint();
+//	     }
 	     catch (UnknownHostException e)
 	     {
 		  // update the status text area to show progress of program
