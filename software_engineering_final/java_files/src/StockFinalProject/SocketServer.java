@@ -42,7 +42,7 @@ public class SocketServer implements Runnable
 	   SocketServer(Socket csocket, String ip)
 	   {
 		  this.csocket  = csocket;
-  this.ipString = ip;
+		  this.ipString = ip;
 	   } 
 
 	   public static void runSocketServer()   // throws Exception
@@ -209,7 +209,7 @@ public class SocketServer implements Runnable
 	       				 
 	       				 System.out.println("Analytics was updated");
 						  usersplaying_hash.replace(clientKey, userKO.getUserObj());		  	 
-						  clientString = usersplaying_hash.get(clientKey).getUserName();
+						  clientString = userKO.getUserObj().getUserName();
 						  Integer turnCounter = usersplaying_hash.get(clientKey).getTurnCounter();
 						  // update the status text area to show progress of program
 						   SocketServerGUI.textArea_3.append(clientString + " is on turn " + turnCounter + newline);
