@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Hashtable;
-//import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -32,12 +32,17 @@ public class SocketServer implements Runnable
 	   static int numOfConnections = 0;
 	   static int numOfMessages = 0;
 	   static int max_connections = 5;
-	   static int numOfTransactions = 0; 
+
+	   static int number_of_transactions = 0;
+	   static int number_of_longs = 0;
+	   static int number_of_shorts = 0;
+	   static int number_of_correct = 0;
+	   static int number_of_neutral = 0;
 
 	   SocketServer(Socket csocket, String ip)
 	   {
-	      this.csocket  = csocket;
-	      this.ipString = ip;
+		  this.csocket  = csocket;
+  this.ipString = ip;
 	   } 
 
 	   public static void runSocketServer()   // throws Exception
@@ -171,7 +176,7 @@ public class SocketServer implements Runnable
 	       		  clientKey = userKO.getUserKey();
 	       		  
 	       		  if(userKO.getUserObj().getTurnCounter() == -12345) {
-	       			System.out.println("now over here");
+	       			System.out.println("User logged off");
 	       			   clientString = userKO.getUserObj().getUserName();
 	       			   SocketServerGUI.textArea.append("User: " + clientString + " logged off" + newline);
 		     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
@@ -187,7 +192,7 @@ public class SocketServer implements Runnable
 	       		  } else {
 	       			  
 	       			  if(usersplaying_hash.containsKey(clientKey) == false) {
-	       				System.out.println("over here");
+	       				System.out.println("User logged on");
 			       		  usersplaying_hash.put(clientKey, userKO.getUserObj());		  	 
 			              clientString = usersplaying_hash.get(clientKey).getUserName();
 			              // update the status text area to show progress of program
@@ -195,11 +200,14 @@ public class SocketServer implements Runnable
 			     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 			     	       SocketServerGUI.textArea.repaint();
 			     	       // update the status text area to show progress of program
-			     	       // SocketServerGUI.textArea.append("RLEN : " + clientString.length() + newline);
 			     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
 			     	       SocketServerGUI.textArea.repaint();
 	       			 } else {
-	       				 System.out.println("in here");
+	       				 
+	       				 // Function to update the Analytics
+	       				runAnalytics();
+	       				 
+	       				 System.out.println("Analytics was updated");
 						  usersplaying_hash.replace(clientKey, userKO.getUserObj());		  	 
 						  clientString = usersplaying_hash.get(clientKey).getUserName();
 						  Integer turnCounter = usersplaying_hash.get(clientKey).getTurnCounter();
@@ -208,7 +216,6 @@ public class SocketServer implements Runnable
 						   SocketServerGUI.textArea_3.setCaretPosition(SocketServerGUI.textArea_3.getDocument().getLength());
 						   SocketServerGUI.textArea_3.repaint();
 						   // update the status text area to show progress of program
-						   // SocketServerGUI.textArea.append("RLEN : " + clientString.length() + newline);
 						   SocketServerGUI.textArea_3.setCaretPosition(SocketServerGUI.textArea_3.getDocument().getLength());
 						   SocketServerGUI.textArea_3.repaint();
 	       			 }
@@ -262,4 +269,35 @@ public class SocketServer implements Runnable
 	     }
 	   
 	  }  // end run thread method
+	
+		public static void runAnalytics() {
+			int number_of_longs = 0;
+			int number_of_shorts = 0;
+			int number_of_correct = 0;
+			int number_of_neutral = 0;
+			int number_of_transactions = 0;
+			
+			double long_percent;
+			double short_percent;
+			double correct_percent;
+			
+		   Set<String> keys = usersplaying_hash.keySet();
+	       for (String key : keys) {
+	    	   number_of_longs += usersplaying_hash.get(key).getNumLongs();
+	    	   number_of_shorts += usersplaying_hash.get(key).getNumShorts();
+	    	   number_of_correct += usersplaying_hash.get(key).getNumCorrect();
+	    	   number_of_neutral += usersplaying_hash.get(key).getNumNeutral();
+	    	   number_of_transactions += usersplaying_hash.get(key).getTurnCounter();
+	    	   
+	    	   long_percent = (double) number_of_longs / (double) number_of_transactions * 100.0;
+	    	   short_percent = (double) number_of_shorts / (double) number_of_transactions * 100.0;
+	    	   correct_percent = (double) (number_of_correct - number_of_neutral) / (double) (number_of_transactions - number_of_neutral) * 100.0;
+	    	   
+	    	   SocketServerGUI.num_correct_long_label.setText(number_of_longs + " Longs");
+	    	   SocketServerGUI.num_correct_short_label.setText(number_of_shorts + " Shorts");
+	    	   SocketServerGUI.long_percentage.setText(String.format("%.2f", long_percent) + "% of Trades");
+	    	   SocketServerGUI.short_percentage.setText(String.format("%.2f", short_percent) + "% of Trades");
+	    	   SocketServerGUI.correct_percentage.setText(String.format("%.2f", correct_percent) + "%");
+	       }
+		}
 }

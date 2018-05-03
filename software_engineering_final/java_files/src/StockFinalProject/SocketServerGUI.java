@@ -1,25 +1,19 @@
 package StockFinalProject;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.Box;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
-
 import javax.swing.JTextArea;
 import java.awt.Font;
 
@@ -29,6 +23,18 @@ public class SocketServerGUI extends JFrame
 	public static JTextArea textArea_1;
 	public static JTextArea textArea_2;
 	public static JTextArea textArea_3;
+	
+	
+    public static JLabel long_label = new JLabel();
+    public static JLabel short_label = new JLabel();
+    public static JLabel num_correct_long_label = new JLabel();
+    public static JLabel num_correct_short_label = new JLabel();
+    public static JLabel long_percentage = new JLabel();
+    public static JLabel short_percentage = new JLabel();
+    public static JLabel correct_label = new JLabel();
+    public static JLabel correct_percentage = new JLabel();
+	
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
@@ -48,21 +54,17 @@ public class SocketServerGUI extends JFrame
 		});
 	}
 
-	
-	/*
-     * Thread to update weather info for NYC and Boston    
-     */     
   private void startSocketServer()
   {	
-	   Thread refreshWeatherThread = new Thread()
+	   Thread refreshThread = new Thread()
 	   {
 		  public void run()
 		  { 	
 			  SocketServer.runSocketServer();
 	     }
 	  };
-
-    refreshWeatherThread.start();
+	  
+    refreshThread.start();
   }
   
   /*
@@ -149,21 +151,11 @@ public class SocketServerGUI extends JFrame
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-
 				JFrame analysis_frame = new JFrame("Analytics");    
 				analysis_frame.setSize(400, 400);
 				analysis_frame.setLayout(null);
 	            analysis_frame.setLocationRelativeTo(null);
 	            analysis_frame.setVisible(true);
-	            
-	            JLabel long_label = new JLabel();
-	            JLabel short_label = new JLabel();
-				JLabel num_correct_long_label = new JLabel();
-				JLabel num_correct_short_label = new JLabel();
-	            JLabel long_percentage = new JLabel();
-	            JLabel short_percentage = new JLabel();
-	            JLabel correct_label = new JLabel();
-	            JLabel correct_percentage = new JLabel();
 	            
 				GridLayout analysisLayout = new GridLayout(0, 2);
 
@@ -182,20 +174,16 @@ public class SocketServerGUI extends JFrame
 				short_label.setForeground(Color.red);
 				short_label.setHorizontalAlignment(JLabel.CENTER);
 			    short_label.setVerticalAlignment(JLabel.CENTER);
-			    
-				num_correct_long_label.setText(0 + " Longs");
+
 				num_correct_long_label.setHorizontalAlignment(JLabel.CENTER);
 				num_correct_long_label.setVerticalAlignment(JLabel.CENTER);
-				
-				num_correct_short_label.setText(0 + " Shorts");
+
 				num_correct_short_label.setHorizontalAlignment(JLabel.CENTER);
 				num_correct_short_label.setVerticalAlignment(JLabel.CENTER);
-			    
-				long_percentage.setText("51% of Trades");
+
 				long_percentage.setHorizontalAlignment(JLabel.CENTER);
 				long_percentage.setVerticalAlignment(JLabel.CENTER);
-				
-				short_percentage.setText("49% of Trades");
+
 				short_percentage.setHorizontalAlignment(JLabel.CENTER);
 				short_percentage.setVerticalAlignment(JLabel.CENTER);
 				
@@ -205,7 +193,6 @@ public class SocketServerGUI extends JFrame
 	            correct_label.setHorizontalAlignment(JLabel.CENTER);
 	            correct_label.setVerticalAlignment(JLabel.CENTER);
 	            
-	            correct_percentage.setText("88%");
 	            correct_percentage.setHorizontalAlignment(JLabel.CENTER);
 	            correct_percentage.setVerticalAlignment(JLabel.CENTER);
 				
@@ -261,5 +248,7 @@ public class SocketServerGUI extends JFrame
 		startRealTimeClock();
 
 		this.setLocationRelativeTo(null);
+		
 	}
+	
 }

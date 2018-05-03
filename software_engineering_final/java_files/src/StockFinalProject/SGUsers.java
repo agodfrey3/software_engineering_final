@@ -15,6 +15,7 @@ public class SGUsers implements Serializable {
 	private int number_of_shorts = 0;
 	private int number_of_correct = 0;
 	private int number_of_neutral = 0;
+	
 	private Vector<String>stockslonged_vector = new Vector<String>();
 	private Vector<String>stocksshorted_vector = new Vector<String>();
 	
@@ -48,6 +49,54 @@ public class SGUsers implements Serializable {
 	
 	public void setTurnCounter(int n) {
 		turnCounter = n;
+	}
+	
+	public int getNumLongs() {
+		return number_of_longs;
+	}
+	
+	public void setNumLongs(int n) {
+		number_of_longs = n;
+	}
+	
+	public void incrementNumLongs() {
+		number_of_longs++;
+	}
+	
+	public int getNumShorts() {
+		return number_of_shorts;
+	}
+	
+	public void setNumShorts(int n) {
+		number_of_shorts = n;
+	}
+	
+	public void incrementNumShorts() {
+		number_of_shorts++;
+	}
+	
+	public int getNumCorrect() {
+		return number_of_correct;
+	}
+	
+	public void setNumCorrect(int n) {
+		number_of_correct = n;
+	}
+	
+	public void incrementNumCorrect() {
+		number_of_correct++;
+	}
+	
+	public int getNumNeutral() {
+		return number_of_neutral;
+	}
+	
+	public void setNumNeutral(int n) {
+		number_of_neutral = n;
+	}
+	
+	public void incrementNumNeutral() {
+		number_of_neutral++;
 	}
 }
 

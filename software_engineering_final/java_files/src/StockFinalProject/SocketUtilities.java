@@ -1,13 +1,11 @@
 package StockFinalProject;
 
-//import java.util.Vector;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-//import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -18,7 +16,6 @@ public class SocketUtilities
 	Socket clientSocket=null;
     DataOutputStream outToServer=null;
     BufferedReader inFromServer=null;
-    //StringBuilder client_username = new StringBuilder("");
 
 	public boolean socketConnect()
 	{
@@ -128,7 +125,7 @@ public class SocketUtilities
 		return msg;
 	}
 	
-	public boolean closeSocket(SGUserKO userKO)
+public boolean closeSocket(SGUserKO userKO)
 	{
 		boolean rc=false;
 		

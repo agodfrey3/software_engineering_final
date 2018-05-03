@@ -7,37 +7,27 @@ package StockFinalProject;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-//import javax.swing.text.BadLocationException;
-//import javax.swing.text.DefaultCaret;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
-//import java.util.Vector;
 import java.io.File;
-import java.awt.BorderLayout;
-//import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-//import java.awt.GridBagConstraints;
-//import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-//import java.io.ObjectOutputStream;
 import java.util.concurrent.ThreadLocalRandom;
-//import java.util.concurrent.TimeUnit;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 
 public class StockGUI extends JPanel {
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 
 	private static JFrame app_frame;
 	//static StockGUI game_frame = new StockGUI();
@@ -238,20 +228,29 @@ public class StockGUI extends JPanel {
 		if (long_or_short == "long" || long_or_short == "short") {
 			net = leverage * (future_price - current_price);
 
-			if (long_or_short == "long")
+			if (long_or_short == "long") {
 				number_of_longs++;
-			if (long_or_short == "short")
+				newuser_obj.incrementNumLongs();
+			}
+			
+			if (long_or_short == "short") {
 				number_of_shorts++;
-
+				newuser_obj.incrementNumShorts();
+			}
+			
 			if (long_or_short == "short") // if it's a short then negate the net
 				net *= -1;
 
-			if (net > 0) // if the transaction made money then the user is correct
+			if (net > 0) {// if the transaction made money then the user is correct
 				number_of_correct++;
+				newuser_obj.incrementNumCorrect();
+			}
 
-			if (net == 0)
+			if (net == 0) {
 				number_of_neutral++;
-
+				newuser_obj.incrementNumNeutral();
+			}
+				
 			if (net < 0) // losses are doubled
 				net *= 2;
 
@@ -618,7 +617,7 @@ public class StockGUI extends JPanel {
 		long_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newuser_obj.addToTurnCounter();
-
+				
 				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
 				GameLogic("long");
@@ -773,6 +772,7 @@ public class StockGUI extends JPanel {
 		short_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newuser_obj.addToTurnCounter();
+
 				turncounter_label.setText(Integer.toString(newuser_obj.getTurnCounter()));
 				// Game Logic
 				GameLogic("short");
@@ -932,56 +932,6 @@ public class StockGUI extends JPanel {
 				}
 			}
 		});
-
-		analytics_button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Thread t = new Thread(new Runnable()
-				// {
-				// public void run()
-				// {
-				// SocketUtilities su = new SocketUtilities();
-				//
-				// if (su.socketConnect() == true)
-				// {
-				// su.sendMessage("Hello there.");
-				// String recvMsgStr = su.recvMessage();
-				// su.sendMessage("QUIT>");
-				//
-				// su.closeSocket();
-				//
-				// JOptionPane.showMessageDialog(null,
-				// "Message : " + recvMsgStr,
-				// "Client",
-				// JOptionPane.WARNING_MESSAGE);
-				// }
-				// else
-				// {
-				// JOptionPane.showMessageDialog(null,
-				// "ERROR: Connection to Socket Server is Down!",
-				// "Client",
-				// JOptionPane.WARNING_MESSAGE);
-				// }
-				// }
-				// });
-				// t.start();
-			}
-		});
-
-		/*
-		 * transaction_button.addActionListener(new ActionListener() { public void
-		 * actionPerformed(ActionEvent e) { Thread t = new Thread(new Runnable() {
-		 * public void run() { SocketUtilities su = new SocketUtilities();
-		 * 
-		 * if (su.socketConnect() == true) { su.sendMessage("Transaction History");
-		 * String recvMsgStr = su.recvMessage(); su.sendMessage("QUIT>");
-		 * 
-		 * su.closeSocket();
-		 * 
-		 * JOptionPane.showMessageDialog(null, "Message : " + recvMsgStr, "Client",
-		 * JOptionPane.WARNING_MESSAGE); } else { JOptionPane.showMessageDialog(null,
-		 * "ERROR: Connection to Socket Server is Down!", "Client",
-		 * JOptionPane.WARNING_MESSAGE); } } }); t.start(); } });
-		 */
 
 		encompassing_panel.add(balanceleaderboard_panel);
 		tickerplaybuttons_panel.add(Box.createRigidArea(new Dimension(0, 20)));
