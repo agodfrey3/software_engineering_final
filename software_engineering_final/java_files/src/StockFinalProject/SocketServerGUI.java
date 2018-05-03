@@ -28,6 +28,7 @@ public class SocketServerGUI extends JFrame
 	public static JTextArea textArea;
 	public static JTextArea textArea_1;
 	public static JTextArea textArea_2;
+	public static JTextArea textArea_3;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
@@ -133,7 +134,7 @@ public class SocketServerGUI extends JFrame
 		panel_1.setBounds(551, 110, 330, 261);
 		contentPane.add(panel_1);
 		
-		JTextArea textArea_3 = new JTextArea();
+		textArea_3 = new JTextArea();
 		textArea_3.setEditable(false);
 		textArea_3.setRows(12);
 		textArea_3.setColumns(25);

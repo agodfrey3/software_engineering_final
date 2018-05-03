@@ -663,6 +663,23 @@ public class StockGUI extends JPanel {
 					// gracefully.
 					i.printStackTrace();
 				}
+				
+				Thread long_thread = new Thread(new Runnable() {
+					public void run() {
+							SocketUtilities su = new SocketUtilities();
+							if (su.socketConnect() == true) {
+								
+								SGUserKO userKO = new SGUserKO(user_key, newuser_obj);
+								su.sendUserKO(userKO);
+	
+								//su.closeSocket(userKO);
+							} else {
+								JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is down!",
+										"Socket Server Error", JOptionPane.WARNING_MESSAGE);
+							}
+					}
+				});
+				long_thread.start();
 
 				graph_file_to_be_parsed = graph_file_paths.get(randomNum);
 				String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);
@@ -799,6 +816,23 @@ public class StockGUI extends JPanel {
 					// gracefully.
 					i.printStackTrace();
 				}
+				
+				Thread short_thread = new Thread(new Runnable() {
+					public void run() {
+							SocketUtilities su = new SocketUtilities();
+							if (su.socketConnect() == true) {
+								
+								SGUserKO userKO = new SGUserKO(user_key, newuser_obj);
+								su.sendUserKO(userKO);
+	
+								//su.closeSocket(userKO);
+							} else {
+								JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is down!",
+										"Socket Server Error", JOptionPane.WARNING_MESSAGE);
+							}
+					}
+				});
+				short_thread.start();
 
 				graph_file_to_be_parsed = graph_file_paths.get(randomNum);
 				String cleaned_file_name = graph_file_to_be_parsed.substring(7, graph_file_to_be_parsed.length() - 4);

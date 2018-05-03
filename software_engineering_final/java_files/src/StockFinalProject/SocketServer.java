@@ -90,10 +90,10 @@ public class SocketServer implements Runnable
 		    }
 
 		    // update the status text area to show progress of program
-		    String tempString = sock.getInetAddress().toString().replace("/", "");
-	        SocketServerGUI.textArea.append("Client Connected: " + tempString + newline);
-	        SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
-	        SocketServerGUI.textArea.repaint();
+//		    String tempString = sock.getInetAddress().toString().replace("/", "");
+//	        SocketServerGUI.textArea.append("Client Connected: " + tempString + newline);
+//	        SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
+//	        SocketServerGUI.textArea.repaint();
 	        
 	        new Thread(new SocketServer(sock, sock.getInetAddress().toString())).start();
 		    
@@ -169,8 +169,9 @@ public class SocketServer implements Runnable
 	       	{
 	       		  SGUserKO userKO = (SGUserKO) in_os.readObject();
 	       		  clientKey = userKO.getUserKey();
-	       		
+	       		  
 	       		  if(userKO.getUserObj().getTurnCounter() == -12345) {
+	       			System.out.println("now over here");
 	       			   clientString = userKO.getUserObj().getUserName();
 	       			   SocketServerGUI.textArea.append("User: " + clientString + " logged off" + newline);
 		     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
@@ -184,77 +185,41 @@ public class SocketServer implements Runnable
 	       			   session_done = true;
 	       			  
 	       		  } else {
-		       		  usersplaying_hash.put(clientKey, userKO.getUserObj());		  	 
-		              clientString = usersplaying_hash.get(clientKey).getUserName();
-		              // update the status text area to show progress of program
-		   	           SocketServerGUI.textArea.append("User: " + clientString + " logged on" + newline);
-		     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
-		     	       SocketServerGUI.textArea.repaint();
-		     	       // update the status text area to show progress of program
-		     	       // SocketServerGUI.textArea.append("RLEN : " + clientString.length() + newline);
-		     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
-		     	       SocketServerGUI.textArea.repaint();
-	       		  }
-	              
-//	     	      if (clientString.length() > 128)
-//	              {
-//	           	   session_done = true;
-//	           	   continue;
-//	              }
-//
-//	              if (clientString.contains("quit"))
-//	              {
-//	                 session_done = true;
-//	              }
-//	              else if (clientString.contains("QUIT"))
-//	              {
-//	                 session_done = true;
-//	              }
-//	              else if (clientString.contains("Quit"))
-//	              {
-//	                 session_done = true;
-//	              }
+	       			  
+	       			  if(usersplaying_hash.containsKey(clientKey) == false) {
+	       				System.out.println("over here");
+			       		  usersplaying_hash.put(clientKey, userKO.getUserObj());		  	 
+			              clientString = usersplaying_hash.get(clientKey).getUserName();
+			              // update the status text area to show progress of program
+			   	           SocketServerGUI.textArea.append("User: " + clientString + " logged on" + newline);
+			     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
+			     	       SocketServerGUI.textArea.repaint();
+			     	       // update the status text area to show progress of program
+			     	       // SocketServerGUI.textArea.append("RLEN : " + clientString.length() + newline);
+			     	       SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
+			     	       SocketServerGUI.textArea.repaint();
+	       			 } else {
+	       				 System.out.println("in here");
+						  usersplaying_hash.replace(clientKey, userKO.getUserObj());		  	 
+						  clientString = usersplaying_hash.get(clientKey).getUserName();
+						  Integer turnCounter = usersplaying_hash.get(clientKey).getTurnCounter();
+						  // update the status text area to show progress of program
+						   SocketServerGUI.textArea_3.append(clientString + " is on turn " + turnCounter + newline);
+						   SocketServerGUI.textArea_3.setCaretPosition(SocketServerGUI.textArea_3.getDocument().getLength());
+						   SocketServerGUI.textArea_3.repaint();
+						   // update the status text area to show progress of program
+						   // SocketServerGUI.textArea.append("RLEN : " + clientString.length() + newline);
+						   SocketServerGUI.textArea_3.setCaretPosition(SocketServerGUI.textArea_3.getDocument().getLength());
+						   SocketServerGUI.textArea_3.repaint();
+	       			 }
+	       		  }	           
 	       	   }
 	         			    		        	
 	           Thread.sleep(500);
 	           
 	        }    // end while loop
-	      
-//	      	String tempString = ipString.toString().replace("/", "");
-//            keyString = tempString + ":" + threadId;
-//            keyString.toString().replace("/", "");
-//            
-//	        if (vec.contains(keyString) == true)
-//	        {
-//	        	int counter = 0;
-//	        	vec.removeElement(keyString);
-//	        	
-//	        	SocketServerGUI.textArea_2.setText("");
-//	        	Enumeration<String> en = vec.elements();
-//	        	while (en.hasMoreElements())
-//	        	{        		     		
-//                    SocketServerGUI.textArea_2.append(en.nextElement() + " || ");
-//	        		
-//	        		if (++counter >= 6)
-//	        		{
-//	        			SocketServerGUI.textArea_2.append("\r\n");
-//	        			counter = 0;
-//	        		}
-//	        	}
-//
-//  	            SocketServerGUI.textArea_2.repaint();
-//	        }
-	      
-//	        numOfConnections--;
-//
-//	        // close client socket
+
 	        csocket.close();
-//	       
-//	        // update the status text area to show progress of program
-//		     SocketServerGUI.textArea.append("Child Thread: " + threadId + " : is Exiting!!!" + newline);
-//		     SocketServerGUI.textArea.append("Number of Connections = " + numOfConnections);
-//		     SocketServerGUI.textArea.setCaretPosition(SocketServerGUI.textArea.getDocument().getLength());
-//		     SocketServerGUI.textArea.repaint();
 		     
 	     } // end try  
 	 
