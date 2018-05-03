@@ -18,11 +18,6 @@ public class SGUsers implements Serializable {
 	private Vector<String>stockslonged_vector = new Vector<String>();
 	private Vector<String>stocksshorted_vector = new Vector<String>();
 	
-//	public SGUsers() {
-//		turnCounter = 0;
-//		balance = 0.0;
-//	}
-	
 	public void setUserName(String userName) {
 		username = userName;
 	}

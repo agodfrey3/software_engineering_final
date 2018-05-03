@@ -25,6 +25,8 @@ import java.awt.Font;
 //import java.awt.GridBagConstraints;
 //import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class StockGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static JFrame app_frame;
+	//static StockGUI game_frame = new StockGUI();
 	private JPanel contentPane;
 
 	private static SGUsers newuser_obj = new SGUsers();
@@ -165,37 +168,43 @@ public class StockGUI extends JPanel {
 		encompassing_panel.add(Box.createRigidArea(new Dimension(0, 5)));
 		app_frame.setContentPane(encompassing_panel);
 		app_frame.setVisible(true);
-
+		//newuser_obj.setUserName(username_textfield.getText());
+		
 		accept_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				StockGUI game_frame = new StockGUI();
-				app_frame.getContentPane().removeAll();
-				app_frame.setContentPane(game_frame);
-				app_frame.revalidate();
-				app_frame.pack();
-				app_frame.setLocationRelativeTo(null);
-				app_frame.setSize(new Dimension(1225, 715));
-				newuser_obj.setUserName(username_textfield.getText());
-				Thread t = new Thread(new Runnable() {
-					public void run() {
-						SocketUtilities su = new SocketUtilities();
-						if (su.socketConnect() == true) {
-							user_key = createUserKey(newuser_obj);
-							SGUserKO userKO = new SGUserKO(user_key, newuser_obj);
-							su.sendUserKO(userKO);
-
-							// System.out.println("returned key is = " + user_key);
-
-							su.closeSocket();
-						} else {
-							JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is down!",
-									"Socket Server Error", JOptionPane.WARNING_MESSAGE);
+//				if(username_textfield.getText().isEmpty()) {
+//					JOptionPane.showMessageDialog(null, "ERROR: Please enter a username!",
+//							"User Initialization Error", JOptionPane.WARNING_MESSAGE);
+//				} else {
+					StockGUI game_frame = new StockGUI();
+					app_frame.getContentPane().removeAll();
+					app_frame.setContentPane(game_frame);
+					app_frame.revalidate();
+					app_frame.pack();
+					app_frame.setLocationRelativeTo(null);
+					app_frame.setSize(new Dimension(1225, 715));
+					newuser_obj.setUserName(username_textfield.getText());
+					
+					Thread t = new Thread(new Runnable() {
+						public void run() {
+								SocketUtilities su = new SocketUtilities();
+								if (su.socketConnect() == true) {
+									user_key = createUserKey(newuser_obj);
+									SGUserKO userKO = new SGUserKO(user_key, newuser_obj);
+									su.sendUserKO(userKO);
+		
+									//su.closeSocket(userKO);
+								} else {
+									JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is down!",
+											"Socket Server Error", JOptionPane.WARNING_MESSAGE);
+								}
 						}
-					}
-				});
-				t.start();
-				app_frame.setTitle("Stock Market Game: Welcome " + newuser_obj.getUserName() + "!");
-				app_frame.setVisible(true);
+					});
+					t.start();
+					
+					app_frame.setTitle("Stock Market Game: Welcome " + newuser_obj.getUserName() + "!");
+					app_frame.setVisible(true);
+			//}
 			}
 		});
 	}
@@ -268,9 +277,31 @@ public class StockGUI extends JPanel {
 	 * Create the frame.
 	 */
 	public StockGUI() {
+		// Handles when player manually closes game: disconnects from socket server
+		app_frame.addWindowListener(new WindowAdapter() {
+	        @Override 
+	        public void windowClosing(WindowEvent e) {
+	        	Thread t = new Thread(new Runnable() {
+					public void run() {
+						SocketUtilities su = new SocketUtilities();
+						if (su.socketConnect() == true) {
+							newuser_obj.setTurnCounter(-12345);
+							SGUserKO tempUserKO = new SGUserKO(user_key, newuser_obj);
+							su.closeSocket(tempUserKO);
+						} else {
+							JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server Terminated Incorrectly",
+									"Socket Server Conn", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				});
+				t.start();
+
+	            app_frame.setVisible(false);
+	            app_frame.dispose();
+	        }
+	    });
+		
 		fill_file_array();
-		// stockslonged_vector.add("Longed ");
-		// stocksshorted_vector.add("Shorted ");
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5)); // Top, Left, Bottom, Right
@@ -681,7 +712,24 @@ public class StockGUI extends JPanel {
 						ticker_label.setText(ticker.toUpperCase());
 
 					} else {
-						System.exit(0);
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								SocketUtilities su = new SocketUtilities();
+								if (su.socketConnect() == true) {
+									newuser_obj.setTurnCounter(-12345);
+									SGUserKO tempUserKO = new SGUserKO(user_key, newuser_obj);
+									su.closeSocket(tempUserKO);
+								} else {
+									JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server Terminated Incorrectly",
+											"Socket Server Conn", JOptionPane.WARNING_MESSAGE);
+								}
+							}
+						});
+						t.start();
+
+						app_frame.setVisible(false);
+			            app_frame.dispose();
+			            System.exit(0);
 					}
 				}
 
@@ -692,23 +740,8 @@ public class StockGUI extends JPanel {
 						public void run() {
 							SocketUtilities su = new SocketUtilities();
 							if (su.socketConnect() == true) {
-
 								su.sendKey(user_key);
-								// su.incrementLS(user_key);
-
-								// ObjectOutputStream outputStream;
-								// try {
-								// outputStream = new ObjectOutputStream(su.clientSocket.getOutputStream());
-								// String[] names = new String[1]; // Empty at the moment
-								// names[0] = "Blah";
-								// String temp = "blah";
-								// outputStream.writeObject(temp);
-								// } catch (IOException e) {
-								// // TODO Auto-generated catch block
-								// e.printStackTrace();
-								// }
-
-								// su.closeSocket();
+								
 							} else {
 								JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is Down!",
 										"Client", JOptionPane.WARNING_MESSAGE);
@@ -815,7 +848,24 @@ public class StockGUI extends JPanel {
 						ticker_label.setText(ticker.toUpperCase());
 
 					} else {
-						System.exit(0);
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								SocketUtilities su = new SocketUtilities();
+								if (su.socketConnect() == true) {
+									newuser_obj.setTurnCounter(-12345);
+									SGUserKO tempUserKO = new SGUserKO(user_key, newuser_obj);
+									su.closeSocket(tempUserKO);
+								} else {
+									JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server Terminated Incorrectly",
+											"Socket Server Conn", JOptionPane.WARNING_MESSAGE);
+								}
+							}
+						});
+						t.start();
+
+						app_frame.setVisible(false);
+			            app_frame.dispose();
+			            System.exit(0);
 					}
 				}
 

@@ -69,25 +69,6 @@ public class SocketUtilities
 		return rc;
 	}
 	
-//	public String getKey() {
-//		
-//		String user_key = "\0";
-//		
-//		try {
-//			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
-//			ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
-//			user_key = (String) in_os.readObject();
-//		}
-//		catch (Exception e)
-//		{
-//			// TODO Auto-generated catch block
-//			System.out.println("somethings wrong with getkey");
-//			e.printStackTrace();
-//		}
-//		
-//		return user_key;
-//	}
-	
 	public boolean sendUserKO(SGUserKO userKO)
 	{
 		boolean rc=false;
@@ -95,23 +76,8 @@ public class SocketUtilities
 		try 
 		{
 			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
-//			ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
 			out_os.writeObject(userKO);
 			
-//			StringBuilder clientdata_strb = new StringBuilder();
-//			clientdata_strb.append(client_username.toString());
-//			clientdata_strb.append(" ==> ");
-//			
-//			for(int i=0; i<msg.size(); i++) {
-//				clientdata_strb.append(msg.get(i));
-//				clientdata_strb.append(" | ");
-//			}
-//			
-//			String clientdata_fullstr = clientdata_strb.toString();
-			
-			// StringBuilder works
-			// Can also access array element as long as index is specified
-			//outToServer.writeBytes(clientdata_fullstr + "\r\n");
 			rc = true;
 		}
 		catch (IOException e)
@@ -145,27 +111,6 @@ public class SocketUtilities
 		return rc;
 	}
 	
-//	public boolean incrementLS(String userKey)
-//	{
-//		boolean rc=false;
-//		
-//		try 
-//		{
-//			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
-//			//ObjectInputStream in_os = new ObjectInputStream(clientSocket.getInputStream());
-//			out_os.writeObject(userKey);
-//			
-//			rc = true;
-//		}
-//		catch (IOException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		return rc;
-//	}
-	
 	public String recvMessage()
 	{
 		String msg=null;
@@ -183,14 +128,18 @@ public class SocketUtilities
 		return msg;
 	}
 	
-	public boolean closeSocket()
+	public boolean closeSocket(SGUserKO userKO)
 	{
 		boolean rc=false;
 		
 		try
 		{
+			ObjectOutputStream out_os = new ObjectOutputStream(clientSocket.getOutputStream());
+			out_os.writeObject(userKO);
+			
 			clientSocket.close();
-                        rc=true;
+			
+            rc=true;
 		}
 		catch (IOException e)
 		{
