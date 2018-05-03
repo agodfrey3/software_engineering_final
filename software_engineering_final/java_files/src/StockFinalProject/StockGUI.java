@@ -30,7 +30,6 @@ public class StockGUI extends JPanel {
 private static final long serialVersionUID = 1L;
 
 	private static JFrame app_frame;
-	//static StockGUI game_frame = new StockGUI();
 	private JPanel contentPane;
 
 	private static SGUsers newuser_obj = new SGUsers();
@@ -102,7 +101,6 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public static String createUserKey(SGUsers user_obj) {
-		// String user_key = String.format("|%020d|", user_obj.getUserName());
 		Random rand = new Random();
 		int m = rand.nextInt(100) + 1;
 		int n = rand.nextInt(100) + 1;
@@ -158,14 +156,13 @@ private static final long serialVersionUID = 1L;
 		encompassing_panel.add(Box.createRigidArea(new Dimension(0, 5)));
 		app_frame.setContentPane(encompassing_panel);
 		app_frame.setVisible(true);
-		//newuser_obj.setUserName(username_textfield.getText());
 		
 		accept_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				if(username_textfield.getText().isEmpty()) {
-//					JOptionPane.showMessageDialog(null, "ERROR: Please enter a username!",
-//							"User Initialization Error", JOptionPane.WARNING_MESSAGE);
-//				} else {
+				if(username_textfield.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "ERROR: Please enter a username!",
+							"User Initialization Error", JOptionPane.WARNING_MESSAGE);
+				} else {
 					StockGUI game_frame = new StockGUI();
 					app_frame.getContentPane().removeAll();
 					app_frame.setContentPane(game_frame);
@@ -182,8 +179,7 @@ private static final long serialVersionUID = 1L;
 									user_key = createUserKey(newuser_obj);
 									SGUserKO userKO = new SGUserKO(user_key, newuser_obj);
 									su.sendUserKO(userKO);
-		
-									//su.closeSocket(userKO);
+
 								} else {
 									JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is down!",
 											"Socket Server Error", JOptionPane.WARNING_MESSAGE);
@@ -194,7 +190,7 @@ private static final long serialVersionUID = 1L;
 					
 					app_frame.setTitle("Stock Market Game: Welcome " + newuser_obj.getUserName() + "!");
 					app_frame.setVisible(true);
-			//}
+			}
 			}
 		});
 	}
@@ -206,8 +202,7 @@ private static final long serialVersionUID = 1L;
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				String file_name = main_dir + listOfFiles[i].getName();
-				// System.out.println("File " + file_name);
+				String file_name = main_dir + listOfFiles[i].getName();			
 				graph_file_paths.add(file_name);
 			}
 		}
@@ -336,23 +331,12 @@ private static final long serialVersionUID = 1L;
 		transhistorydisplay_panel.setLayout(new BoxLayout(transhistorydisplay_panel, BoxLayout.Y_AXIS));
 		transhistorydisplay_panel.setBackground(Color.white);
 
-		/*
-		 * GridBagConstraints gbc = new GridBagConstraints(); //gbc.gridx = 0;
-		 * //gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1D; gbc.anchor =
-		 * GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.HORIZONTAL;
-		 * gbc.gridwidth = GridBagConstraints.REMAINDER;
-		 * 
-		 * //DefaultCaret caret = (DefaultCaret)transhistory_display.getCaret();
-		 * //caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-		 */
-
 		// Panel that allows text area to be scrollable if first dimensions are filled
 		JScrollPane transhistory_scrollpane = new JScrollPane(transhistorydisplay_panel);
 		transhistory_scrollpane.setPreferredSize(new Dimension(300, 450));
 
 		// Panel that houses users the ticker label, price label, stock graph panel, and
-		// the
-		// playbuttons_panel
+		// the playbuttons_panel
 		JPanel tickerplaybuttons_panel = new JPanel();
 		tickerplaybuttons_panel.setLayout(new BoxLayout(tickerplaybuttons_panel, BoxLayout.Y_AXIS));
 		tickerplaybuttons_panel.setPreferredSize(new Dimension(650, 675));
@@ -450,7 +434,7 @@ private static final long serialVersionUID = 1L;
 		pointsgained_panel.add(lastgained_label);
 		pointsgained_panel.add(pointsgained_label);
 		balanceleaderboard_panel.add(pointsgained_panel);
-		balanceleaderboard_panel.add(transhistory_scrollpane);// transhistorydisplay_panel);
+		balanceleaderboard_panel.add(transhistory_scrollpane);
 
 		// Ticker Label
 		ticker_label = new JLabel("Ticker", SwingConstants.CENTER);
@@ -672,8 +656,6 @@ private static final long serialVersionUID = 1L;
 								
 								SGUserKO userKO = new SGUserKO(user_key, newuser_obj);
 								su.sendUserKO(userKO);
-	
-								//su.closeSocket(userKO);
 							} else {
 								JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is down!",
 										"Socket Server Error", JOptionPane.WARNING_MESSAGE);
@@ -753,20 +735,6 @@ private static final long serialVersionUID = 1L;
 
 				else {
 					newuser_obj.addToStocksLonged("New Stock");
-
-					Thread t = new Thread(new Runnable() {
-						public void run() {
-							SocketUtilities su = new SocketUtilities();
-							if (su.socketConnect() == true) {
-								su.sendKey(user_key);
-								
-							} else {
-								JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is Down!",
-										"Client", JOptionPane.WARNING_MESSAGE);
-							}
-						}
-					});
-					t.start();
 				}
 			}
 		});
@@ -828,8 +796,6 @@ private static final long serialVersionUID = 1L;
 								
 								SGUserKO userKO = new SGUserKO(user_key, newuser_obj);
 								su.sendUserKO(userKO);
-	
-								//su.closeSocket(userKO);
 							} else {
 								JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is down!",
 										"Socket Server Error", JOptionPane.WARNING_MESSAGE);
@@ -908,31 +874,7 @@ private static final long serialVersionUID = 1L;
 				}
 
 				else {
-
 					newuser_obj.addToStocksShorted("New Stock");
-
-					Thread t = new Thread(new Runnable() {
-						public void run() {
-							SocketUtilities su = new SocketUtilities();
-							if (su.socketConnect() == true) {
-								// su.sendMessage(stocksshorted_vector);
-
-								// String recvMsgStr = su.recvMessage();
-								// su.sendMessage("QUIT>");
-								//
-								// su.closeSocket();
-								//
-								// JOptionPane.showMessageDialog(null,
-								// "Message : " + recvMsgStr,
-								// "Client",
-								// JOptionPane.WARNING_MESSAGE);
-							} else {
-								JOptionPane.showMessageDialog(null, "ERROR: Connection to Socket Server is Down!",
-										"Client", JOptionPane.WARNING_MESSAGE);
-							}
-						}
-					});
-					t.start();
 				}
 			}
 		});

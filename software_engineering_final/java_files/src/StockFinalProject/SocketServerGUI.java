@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
 import java.awt.Font;
@@ -122,8 +123,8 @@ public class SocketServerGUI extends JFrame
 		textArea = new JTextArea();
 		textArea.setFont(new Font("Monospaced", Font.BOLD, 10));
 		textArea.setEditable(false);
-		textArea.setRows(26); //15
-		textArea.setColumns(85); //46
+		textArea.setRows(26);
+		textArea.setColumns(85);
 		panel.add(textArea);
 		
 		JScrollPane txt_more_info_pane = new JScrollPane(textArea);  
@@ -134,13 +135,16 @@ public class SocketServerGUI extends JFrame
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel_1.setBounds(551, 110, 330, 261);
-		contentPane.add(panel_1);
+		//contentPane.add(panel_1);
 		
 		textArea_3 = new JTextArea();
 		textArea_3.setEditable(false);
-		textArea_3.setRows(12);
+		textArea_3.setRows(15);
 		textArea_3.setColumns(25);
-		panel_1.add(textArea_3);
+		
+		JScrollPane turncount_scrollpane = new JScrollPane(textArea_3);
+		panel_1.add(turncount_scrollpane);
+		contentPane.add(panel_1);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(123, 466, 103, 109);
